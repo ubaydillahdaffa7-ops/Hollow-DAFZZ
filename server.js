@@ -8,7 +8,7 @@ const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 10000;
-const PUBLIC_DIR = path.join(__dirname, "public");
+const PUBLIC_DIR = __dirname;
 
 app.disable("x-powered-by");
 
