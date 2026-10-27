@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#08080d">
 <title>KING DAFFZZ | HOLOGRAM PANEL</title>
+<script src="/socket.io/socket.io.js"></script>
 <style>
 :root{--bg:#08080d;--panel:#111118;--neon:#ff243d;--neon2:#ff6374;--glow:rgba(255,36,61,.36);--line:rgba(255,50,75,.42);--text:#f8f4f7;--muted:#aaa2b0}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
@@ -39,7 +40,6 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
 .stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.stat{padding:14px}.stat b{display:block;color:var(--neon2);font-size:17px}.stat span{color:var(--muted);font-size:9px;letter-spacing:1px}
 .nav{position:fixed;z-index:10;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:10px 7px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:rgba(8,8,13,.96);border-top:1px solid var(--line);backdrop-filter:blur(12px)}
 .nav button{padding:7px 1px;background:transparent;border:0;border-radius:9px;color:var(--muted);font-size:9px;font-weight:bold}.nav button span{display:block;margin-bottom:4px;font-size:20px}.nav button.active{color:var(--neon2);background:var(--glow)}
-/* ORBIT MENU */
 .orbit-wrap{position:relative;width:100%;max-width:360px;height:330px;margin:5px auto 18px;isolation:isolate}
 .orbit-ring{position:absolute;left:50%;top:50%;width:220px;height:220px;transform:translate(-50%,-50%);border:1px dashed var(--line);border-radius:50%;box-shadow:0 0 22px var(--glow),inset 0 0 22px var(--glow);animation:spin 18s linear infinite}
 .orbit-ring:before,.orbit-ring:after{content:"";position:absolute;inset:18px;border:1px solid var(--line);border-radius:50%}.orbit-ring:after{inset:-12px;border-style:dotted}
@@ -72,10 +72,10 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
     <div class="login-art"><div class="login-orb">✦</div></div>
     <form id="loginForm" class="card login-form">
       <div class="section-title" style="margin-top:0">◈ SYSTEM LOGIN</div>
-      <label class="muted" for="username">USERNAME</label><input id="username" class="field" placeholder="Masukkan username" autocomplete="username" required>
+      <label class="muted" for="username">USERNAME</label><input id="username" class="field" placeholder="Masukkan username" autocomplete="username" maxlength="24" required>
       <label class="muted" for="password">PASSWORD</label><input id="password" class="field" type="password" placeholder="Masukkan sandi" autocomplete="current-password" required>
       <button class="btn" type="submit">⟢ MASUK KE PANEL</button>
-      <p class="muted center">Demo UI • Login lokal tanpa server</p>
+      <p class="muted center">Masuk sebagai Member • Isi username dan password pilihanmu</p>
     </form>
     <div class="center muted">RED / PURPLE HOLOGRAM INTERFACE</div>
   </div>
@@ -85,8 +85,8 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
 <section id="dashboardPage" class="page">
   <div class="hero card"><div class="neon" style="font-size:10px;letter-spacing:3px">SYSTEM ONLINE // 01</div><h1>WELCOME TO<br><span class="neon">KING DAFFZZ</span></h1><p class="muted">Interface hologram futuristik. Pilih menu dan jelajahi panel demo.</p>
   <div class="anime-stage"><div class="stars"></div><div class="anime"><div class="body"></div><div class="face"></div><div class="hair"></div><div class="eye l"></div><div class="eye r"></div></div><div class="scan"></div><div style="position:absolute;left:12px;bottom:10px;font-size:9px;letter-spacing:2px;color:var(--neon2)">ANIME CYBER // LIVE FX</div></div></div>
-  <div class="stat-grid"><div class="stat card"><b>● ONLINE</b><span>STATUS PANEL</span></div><div class="stat card"><b id="clock">--:--</b><span>WAKTU PERANGKAT</span></div><div class="stat card"><b>02</b><span>UI THEMES</span></div><div class="stat card"><b>LOCAL</b><span>DEMO SESSION</span></div></div>
-  <div class="section-title">◈ QUICK ACCESS</div><div class="tool-grid"><button class="tool" data-goto="bugPage"><span class="ico">🌀</span><b>BUG PANEL</b><small>Menu hologram interaktif</small></button><button class="tool" data-goto="chatPage"><span class="ico">💬</span><b>PUBLIC CHAT</b><small>Obrolan lokal demo</small></button></div>
+  <div class="stat-grid"><div class="stat card"><b>● ONLINE</b><span>STATUS PANEL</span></div><div class="stat card"><b id="clock">--:--</b><span>WAKTU PERANGKAT</span></div><div class="stat card"><b>02</b><span>UI THEMES</span></div><div class="stat card"><b>MEMBER</b><span>SESSION</span></div></div>
+  <div class="section-title">◈ QUICK ACCESS</div><div class="tool-grid"><button class="tool" data-goto="bugPage"><span class="ico">🌀</span><b>BUG PANEL</b><small>Menu hologram interaktif</small></button><button class="tool" data-goto="chatPage"><span class="ico">💬</span><b>PUBLIC CHAT</b><small>Obrolan realtime online</small></button></div>
 </section>
 <section id="bugPage" class="page hidden">
   <div class="section-title">◈ HOLOGRAM COMMAND CENTER</div>
@@ -124,33 +124,203 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
   <div id="customTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⌘ BUG CUSTOM</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Kustomisasi tampilan demo tanpa aksi terhadap aplikasi lain.</p><input class="field" id="customName" placeholder="Nama preset visual" maxlength="40"><button id="customBtn" class="btn" style="width:100%">SIMPAN PRESET DEMO</button><div id="presetList" class="muted" style="margin-top:10px"></div></div>
   <div class="status">⚠ <b>DEMO MODE:</b> Semua modul hanya simulasi antarmuka. Tidak ada fitur untuk mengirim spam, membuat crash, atau mengganggu akun dan perangkat.</div>
 </section>
-<section id="chatPage" class="page hidden"><div class="section-title">◈ PUBLIC CHAT // LOCAL</div><div class="chatbox card"><div class="chat-head"><div><b>🌐 Public Room</b><div class="muted">Chat demo di perangkat ini</div></div><span class="neon">● LOCAL</span></div><div id="messages" class="messages"><div class="msg"><small>SYSTEM • BARU SAJA</small>Selamat datang di Public Chat! Pesan hanya tersimpan selama halaman ini terbuka.</div></div><form id="chatForm" class="chat-form"><input id="chatInput" class="field" placeholder="Tulis pesan..." maxlength="240" required><button class="btn" type="submit">➤</button></form></div><p class="muted">Catatan: ini chat lokal, bukan chat online sungguhan. Pesan tidak dikirim ke pengguna lain atau server.</p></section>
-<section id="infoPage" class="page hidden"><div class="section-title">◈ DEVELOPER INFORMATION</div><div class="info-card card center"><div class="login-orb" style="margin:10px auto 20px;width:88px;height:88px;font-size:32px">✦</div><div class="neon" style="font-weight:900;font-size:16px">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪</div><p class="muted">DEVELOPER BY</p><div style="height:1px;background:var(--line);margin:18px 0"></div><div class="info-row"><span class="ico">📱</span><div><b>WhatsApp Owner</b><br><span class="muted">+62 851-5183-3180</span></div></div><div class="info-row"><span class="ico">✉️</span><div><b>Email</b><br><span class="muted">ubaydillahdaffa7@gmail.com</span></div></div><a class="btn" href="https://wa.me/6285151833180" target="_blank" rel="noopener">HUBUNGI VIA WHATSAPP ↗</a><a class="btn ghost" href="mailto:ubaydillahdaffa7@gmail.com">KIRIM EMAIL ↗</a></div><div class="status">✦ KING DAFFZZ UI • Versi demo 1.1<br>Desain responsif dengan dua tema hologram.</div></section>
+<section id="chatPage" class="page hidden"><div class="section-title">◈ PUBLIC CHAT // ONLINE</div><div class="chatbox card"><div class="chat-head"><div><b>🌐 Public Room</b><div class="muted">Pesan dibagikan ke pengguna online</div></div><span id="chatStatus" class="neon">● MENGHUBUNGKAN</span></div><div id="messages" class="messages"><div class="msg"><small>SYSTEM</small>Menghubungkan ke Public Chat...</div></div><form id="chatForm" class="chat-form"><input id="chatInput" class="field" placeholder="Tulis pesan..." maxlength="1000" autocomplete="off" required><button class="btn" type="submit">➤</button></form></div><p class="muted">Pesan tersimpan sementara di server (maksimal 100 pesan). Riwayat terhapus saat server dimulai ulang.</p></section>
+<section id="infoPage" class="page hidden"><div class="section-title">◈ DEVELOPER INFORMATION</div><div class="info-card card center"><div class="login-orb" style="margin:10px auto 20px;width:88px;height:88px;font-size:32px">✦</div><div class="neon" style="font-weight:900;font-size:16px">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪</div><p class="muted">DEVELOPER BY</p><div style="height:1px;background:var(--line);margin:18px 0"></div><div class="info-row"><span class="ico">📱</span><div><b>WhatsApp Owner</b><br><span class="muted">+62 851-5183-3180</span></div></div><div class="info-row"><span class="ico">✉️</span><div><b>Email</b><br><span class="muted">ubaydillahdaffa7@gmail.com</span></div></div><a class="btn" href="https://wa.me/6285151833180" target="_blank" rel="noopener">HUBUNGI VIA WHATSAPP ↗</a><a class="btn ghost" href="mailto:ubaydillahdaffa7@gmail.com">KIRIM EMAIL ↗</a></div><div class="status">✦ KING DAFFZZ UI • Versi demo 1.2<br>Desain responsif dengan dua tema hologram.</div></section>
 <div class="footer">KING DAFFZZ • HOLOGRAM INTERFACE • DEMO ONLY</div>
 </main>
 <nav id="nav" class="nav hidden"><button class="active" data-page="dashboardPage"><span>⌂</span>DASHBOARD</button><button data-page="bugPage"><span>◉</span>BUG</button><button data-page="chatPage"><span>▤</span>PUBLIC CHAT</button><button data-page="infoPage"><span>ⓘ</span>INFO</button></nav>
 <div id="toast" class="toast"></div>
 <script>
 "use strict";
-const loginScreen=document.getElementById("loginScreen"),appScreen=document.getElementById("appScreen"),nav=document.getElementById("nav");
-function toast(message){const el=document.getElementById("toast");el.textContent=message;el.classList.add("show");clearTimeout(window.toastTimer);window.toastTimer=setTimeout(()=>el.classList.remove("show"),2400)}
-document.getElementById("loginForm").addEventListener("submit",function(e){e.preventDefault();const button=e.submitter;button.textContent="◌ MEMBUKA PANEL...";button.disabled=true;setTimeout(()=>{loginScreen.classList.add("hidden");appScreen.classList.remove("hidden");nav.classList.remove("hidden");button.disabled=false;button.textContent="⟢ MASUK KE PANEL";toast("Akses demo berhasil dibuka ✦")},650)});
-function showPage(pageId){document.querySelectorAll(".page").forEach(p=>p.classList.toggle("hidden",p.id!==pageId));document.querySelectorAll(".nav button").forEach(b=>b.classList.toggle("active",b.dataset.page===pageId));window.scrollTo({top:0,behavior:"smooth"})}
-nav.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.page)));
-document.querySelectorAll("[data-goto]").forEach(b=>b.addEventListener("click",()=>showPage(b.dataset.goto)));
-document.getElementById("modeBtn").addEventListener("click",function(){document.body.classList.toggle("purple");const purple=document.body.classList.contains("purple");this.textContent=purple?"◉ MODE MERAH":"◉ MODE UNGU";toast(purple?"Tema ungu-hitam aktif":"Tema merah-hitam aktif")});
-function selectModule(panelId){document.querySelectorAll(".module").forEach(m=>m.classList.toggle("hidden",m.id!==panelId));document.querySelectorAll(".orbit-node").forEach(b=>b.classList.toggle("selected",b.dataset.panel===panelId));const names={bugTools:"BUG",senderTools:"SENDER",banTools:"BAN GROUP",customTools:"BUG CUSTOM"};toast("Menu "+(names[panelId]||"BUG")+" dibuka");}
-document.querySelectorAll(".orbit-node").forEach(b=>b.addEventListener("click",()=>selectModule(b.dataset.panel)));
-document.querySelectorAll(".back-btn").forEach(b=>b.addEventListener("click",()=>selectModule(b.dataset.panel)));
-document.querySelectorAll(".sim").forEach(b=>b.addEventListener("click",()=>{const name=b.dataset.name||"modul";toast("SIMULASI: "+name+" — tidak ada aksi nyata.")}));
-document.getElementById("customBtn").addEventListener("click",()=>{const input=document.getElementById("customName"),name=input.value.trim();if(!name){toast("Isi nama preset visual dulu.");return}const list=document.getElementById("presetList"),item=document.createElement("div");item.textContent="✦ Preset tersimpan: "+name;list.appendChild(item);input.value="";toast('Preset "'+name+'" disimpan sementara.')});
-let senderLinked=false;
-function renderSender(){const badge=document.getElementById("senderBadge"),detail=document.getElementById("senderDetail"),label=document.getElementById("senderLabel");badge.className="status-pill "+(senderLinked?"online":"offline");badge.textContent=senderLinked?"● SUDAH DITAUTKAN":"● BELUM DITAUTKAN";detail.textContent=senderLinked?"Sender demo aktif: "+(label.value.trim()||"DAFFZZ-DEMO"):"Belum ada sender demo yang ditautkan.";document.getElementById("linkSenderBtn").textContent=senderLinked?"✓ SENDER DEMO TERTAUT":"🔗 TAUTKAN SENDER DEMO"}
-document.getElementById("linkSenderBtn").addEventListener("click",()=>{senderLinked=true;if(!document.getElementById("senderLabel").value.trim())document.getElementById("senderLabel").value="DAFFZZ-DEMO";renderSender();toast("Sender demo berhasil ditautkan secara lokal ✦")});
-document.getElementById("unlinkSenderBtn").addEventListener("click",()=>{senderLinked=false;renderSender();toast("Tautan sender demo diputuskan")});
-document.getElementById("senderLabel").addEventListener("input",()=>{if(senderLinked)renderSender()});
-document.getElementById("chatForm").addEventListener("submit",function(e){e.preventDefault();const input=document.getElementById("chatInput"),text=input.value.trim();if(!text)return;const msg=document.createElement("div");msg.className="msg mine";const label=document.createElement("small");label.textContent="KAMU • BARU SAJA";msg.appendChild(label);msg.appendChild(document.createTextNode(text));const messages=document.getElementById("messages");messages.appendChild(msg);input.value="";messages.scrollTop=messages.scrollHeight});
-function updateClock(){document.getElementById("clock").textContent=new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"})}updateClock();setInterval(updateClock,10000);renderSender();
+
+const loginScreen = document.getElementById("loginScreen");
+const appScreen = document.getElementById("appScreen");
+const nav = document.getElementById("nav");
+const loginForm = document.getElementById("loginForm");
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+
+function toast(message) {
+  const el = document.getElementById("toast");
+  el.textContent = message;
+  el.classList.add("show");
+  clearTimeout(window.toastTimer);
+  window.toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+}
+
+function enterPanel(username) {
+  sessionStorage.setItem("hollow_username", username);
+  loginScreen.classList.add("hidden");
+  appScreen.classList.remove("hidden");
+  nav.classList.remove("hidden");
+  document.querySelector("#dashboardPage .stat:nth-child(4) b").textContent = "MEMBER";
+  toast("Berhasil masuk sebagai Member ✦");
+}
+
+loginForm.addEventListener("submit", function(e) {
+  e.preventDefault();
+  const username = usernameInput.value.trim().slice(0, 24);
+  const password = passwordInput.value;
+  if (!username || !password) {
+    toast("Isi username dan password.");
+    return;
+  }
+  // UI-only sign-in: this does not create a secure server-side account.
+  enterPanel(username);
+  passwordInput.value = "";
+});
+
+function showPage(pageId) {
+  document.querySelectorAll(".page").forEach(p => p.classList.toggle("hidden", p.id !== pageId));
+  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.page === pageId));
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+nav.querySelectorAll("button").forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
+document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => showPage(b.dataset.goto)));
+
+document.getElementById("modeBtn").addEventListener("click", function() {
+  document.body.classList.toggle("purple");
+  const purple = document.body.classList.contains("purple");
+  this.textContent = purple ? "◉ MODE MERAH" : "◉ MODE UNGU";
+  toast(purple ? "Tema ungu-hitam aktif" : "Tema merah-hitam aktif");
+});
+
+function selectModule(panelId) {
+  document.querySelectorAll(".module").forEach(m => m.classList.toggle("hidden", m.id !== panelId));
+  document.querySelectorAll(".orbit-node").forEach(b => b.classList.toggle("selected", b.dataset.panel === panelId));
+  const names = { bugTools: "BUG", senderTools: "SENDER", banTools: "BAN GROUP", customTools: "BUG CUSTOM" };
+  toast("Menu " + (names[panelId] || "BUG") + " dibuka");
+}
+document.querySelectorAll(".orbit-node").forEach(b => b.addEventListener("click", () => selectModule(b.dataset.panel)));
+document.querySelectorAll(".back-btn").forEach(b => b.addEventListener("click", () => selectModule(b.dataset.panel)));
+document.querySelectorAll(".sim").forEach(b => b.addEventListener("click", () => {
+  toast("SIMULASI: " + (b.dataset.name || "modul") + " — tidak ada aksi nyata.");
+}));
+
+document.getElementById("customBtn").addEventListener("click", () => {
+  const input = document.getElementById("customName");
+  const name = input.value.trim();
+  if (!name) { toast("Isi nama preset visual dulu."); return; }
+  const item = document.createElement("div");
+  item.textContent = "✦ Preset tersimpan: " + name;
+  document.getElementById("presetList").appendChild(item);
+  input.value = "";
+  toast('Preset "' + name + '" disimpan sementara.');
+});
+
+let senderLinked = false;
+function renderSender() {
+  const badge = document.getElementById("senderBadge");
+  const detail = document.getElementById("senderDetail");
+  const label = document.getElementById("senderLabel");
+  badge.className = "status-pill " + (senderLinked ? "online" : "offline");
+  badge.textContent = senderLinked ? "● SUDAH DITAUTKAN" : "● BELUM DITAUTKAN";
+  detail.textContent = senderLinked
+    ? "Sender demo aktif: " + (label.value.trim() || "DAFFZZ-DEMO")
+    : "Belum ada sender demo yang ditautkan.";
+  document.getElementById("linkSenderBtn").textContent = senderLinked
+    ? "✓ SENDER DEMO TERTAUT"
+    : "🔗 TAUTKAN SENDER DEMO";
+}
+document.getElementById("linkSenderBtn").addEventListener("click", () => {
+  senderLinked = true;
+  if (!document.getElementById("senderLabel").value.trim()) {
+    document.getElementById("senderLabel").value = "DAFFZZ-DEMO";
+  }
+  renderSender();
+  toast("Sender demo berhasil ditautkan secara lokal ✦");
+});
+document.getElementById("unlinkSenderBtn").addEventListener("click", () => {
+  senderLinked = false;
+  renderSender();
+  toast("Tautan sender demo diputuskan");
+});
+document.getElementById("senderLabel").addEventListener("input", () => {
+  if (senderLinked) renderSender();
+});
+
+// Public Chat: requires the Socket.IO server implementation in server.js.
+const messagesBox = document.getElementById("messages");
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+const chatStatus = document.getElementById("chatStatus");
+let socket = null;
+let myUsername = sessionStorage.getItem("hollow_username") || "Member";
+const displayedMessageIds = new Set();
+
+function renderChatMessage(data) {
+  if (!data || !data.id || displayedMessageIds.has(data.id)) return;
+  displayedMessageIds.add(data.id);
+
+  const msg = document.createElement("div");
+  msg.className = "msg";
+  if (data.username === myUsername) msg.classList.add("mine");
+
+  const label = document.createElement("small");
+  const time = data.time ? new Date(data.time) : new Date();
+  label.textContent = (data.username || "Member") + " • " +
+    time.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+
+  msg.appendChild(label);
+  msg.appendChild(document.createTextNode(String(data.message || "")));
+  messagesBox.appendChild(msg);
+
+  while (messagesBox.children.length > 100) messagesBox.removeChild(messagesBox.firstChild);
+  messagesBox.scrollTop = messagesBox.scrollHeight;
+}
+
+if (typeof window.io === "function") {
+  socket = window.io();
+
+  socket.on("connect", () => {
+    chatStatus.textContent = "● ONLINE";
+    chatStatus.style.color = "#71ffb0";
+  });
+
+  socket.on("disconnect", () => {
+    chatStatus.textContent = "● TERPUTUS";
+    chatStatus.style.color = "#ff7180";
+  });
+
+  socket.on("connect_error", () => {
+    chatStatus.textContent = "● GAGAL TERHUBUNG";
+    chatStatus.style.color = "#ff7180";
+  });
+
+  socket.on("chat:history", history => {
+    messagesBox.replaceChildren();
+    displayedMessageIds.clear();
+    if (Array.isArray(history)) history.slice(-100).forEach(renderChatMessage);
+  });
+
+  socket.on("chat:new", renderChatMessage);
+} else {
+  chatStatus.textContent = "● SERVER BELUM SIAP";
+}
+
+chatForm.addEventListener("submit", e => {
+  e.preventDefault();
+  const message = chatInput.value.trim();
+  if (!message) return;
+
+  if (!socket || !socket.connected) {
+    toast("Server chat belum terhubung.");
+    return;
+  }
+
+  myUsername = sessionStorage.getItem("hollow_username") || "Member";
+  socket.emit("chat:send", { username: myUsername, message: message.slice(0, 1000) });
+  chatInput.value = "";
+});
+
+function updateClock() {
+  document.getElementById("clock").textContent = new Date().toLocaleTimeString("id-ID", {
+    hour: "2-digit", minute: "2-digit"
+  });
+}
+updateClock();
+setInterval(updateClock, 10000);
+renderSender();
 </script>
 </body>
 </html>
