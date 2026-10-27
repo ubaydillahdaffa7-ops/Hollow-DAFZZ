@@ -4,412 +4,262 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#08080d">
-<title>KING DAFFZZ | HOLLOW PANEL</title>
+<title>KING DAFFZZ | HOLOGRAM PANEL</title>
 <style>
-:root{color-scheme:dark;--bg:#08080d;--panel:#111118;--panel2:#171720;--line:#292936;--neon:#ff243d;--neon2:#ff6374;--text:#f5f5fb;--muted:#9999aa;--good:#71ffb0}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:radial-gradient(ellipse at top,#1b1019 0%,var(--bg) 55%);color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
-body.purple{--neon:#b04cff;--neon2:#d09aff;background:radial-gradient(ellipse at top,#1c1029 0%,var(--bg) 58%)}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-.wrap{width:min(100% - 24px,1050px);margin:0 auto}
-header{padding:22px 0 16px}
-.topline{display:flex;align-items:center;justify-content:space-between;gap:12px}
-.brand{font-weight:950;letter-spacing:1.4px;font-size:clamp(20px,5vw,29px)}
-.brand span{color:var(--neon)}
-.clock{color:var(--muted);font-size:13px;border:1px solid var(--line);padding:8px 11px;border-radius:12px;white-space:nowrap}
-.eyebrow{color:var(--neon2);font-size:11px;font-weight:800;letter-spacing:2px;margin:7px 0 0}
-main{padding-bottom:40px}
-.card{background:linear-gradient(145deg,rgba(25,25,36,.97),rgba(14,14,21,.97));border:1px solid var(--line);border-radius:20px;padding:20px;box-shadow:0 16px 45px #0003}
-.login-card{width:min(100%,430px);margin:28px auto}
-h1,h2,h3,p{margin-top:0}
-h1{font-size:27px;margin-bottom:8px}
-h2{font-size:20px;margin-bottom:8px}
-h3{font-size:15px;margin-bottom:8px}
-.muted{color:var(--muted);font-size:13px;line-height:1.55}
-label{display:block;font-size:12px;color:#c8c8d4;margin:16px 0 7px}
-input,textarea{width:100%;border:1px solid #353543;background:#09090f;color:var(--text);padding:13px 14px;border-radius:12px;outline:none}
-input:focus,textarea:focus{border-color:var(--neon);box-shadow:0 0 0 3px color-mix(in srgb,var(--neon) 15%,transparent)}
-.btn{border:1px solid var(--line);background:#1a1a25;color:var(--text);padding:11px 14px;border-radius:12px;font-weight:750;transition:.15s}
-.btn:hover{border-color:var(--neon);transform:translateY(-1px)}
-.btn.primary{background:var(--neon);color:white;border-color:var(--neon)}
-.btn.full{width:100%;margin-top:16px}
-.btn.small{font-size:12px;padding:9px 11px}
-.login-mark{width:58px;height:58px;display:grid;place-items:center;border-radius:17px;background:#291016;border:1px solid #69202c;color:var(--neon);font-size:25px;margin-bottom:18px}
-.nav{display:flex;gap:8px;overflow:auto;padding:4px 0 14px;scrollbar-width:thin}
-.nav button{flex:0 0 auto}
-.nav button.active{background:var(--neon);border-color:var(--neon);color:#fff}
-.hero{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:5px 0 16px}
-.hero p{margin-bottom:0}
-.status-pill{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border:1px solid var(--line);border-radius:999px;font-size:11px;font-weight:800;white-space:nowrap}
-.status-pill.online{color:var(--good);border-color:#24583d}
-.status-pill.offline{color:var(--muted)}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.stat{background:#0b0b12;border:1px solid var(--line);border-radius:15px;padding:15px}
-.stat strong{font-size:23px;display:block;margin-top:7px}
-.stat span{font-size:11px;color:var(--muted);letter-spacing:.7px}
-.section{margin-top:15px}
-.section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
-.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.quick{background:#0b0b12;border:1px solid var(--line);padding:15px;border-radius:15px;text-align:left;color:var(--text)}
-.quick b{display:block;margin-bottom:5px}
-.quick span{font-size:12px;color:var(--muted)}
-.chat-shell{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#09090f}
-.chat-top{padding:13px 15px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:center}
-.messages{height:min(48vh,430px);min-height:250px;overflow-y:auto;padding:13px;display:flex;flex-direction:column;gap:10px}
-.msg{align-self:flex-start;max-width:88%;white-space:pre-wrap;overflow-wrap:anywhere;background:#191923;border:1px solid #30303e;border-radius:5px 14px 14px 14px;padding:10px 12px;font-size:14px;line-height:1.45}
-.msg.mine{align-self:flex-end;background:#35121a;border-color:#69202c;border-radius:14px 5px 14px 14px}
-.msg small{display:block;color:var(--neon2);font-size:10px;font-weight:800;margin-bottom:5px}
-.chat-form{display:flex;gap:8px;padding:11px;border-top:1px solid var(--line)}
-.chat-form input{min-width:0}
-.chat-form .btn{flex:0 0 auto}
-.module-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.orbit-node{padding:16px 12px;text-align:left;border:1px solid var(--line);border-radius:15px;background:#0b0b12;color:var(--text)}
-.orbit-node.selected{border-color:var(--neon);box-shadow:inset 0 0 0 1px var(--neon)}
-.orbit-node strong{display:block;margin-bottom:5px}
-.orbit-node span{color:var(--muted);font-size:12px}
-.module{margin-top:12px}
-.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}
-.row input{flex:1;min-width:140px}
-.preset-list{display:grid;gap:7px;margin-top:12px;color:var(--muted);font-size:13px}
-.preset-list div{padding:10px;background:#0b0b12;border:1px solid var(--line);border-radius:10px}
-.notice{border:1px solid #4a3538;background:#211317;padding:12px;border-radius:12px;font-size:12px;color:#e8c8cd;line-height:1.5}
-footer{text-align:center;padding:18px;color:#777786;font-size:11px}
-#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#f7f7fb;color:#111;padding:12px 16px;border-radius:12px;max-width:calc(100% - 30px);font-size:13px;font-weight:750;box-shadow:0 12px 35px #0007;transition:.2s}
-#toast.show{opacity:1;transform:translate(-50%,0)}
-@media(min-width:720px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}.quick-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.module-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.login-card{margin-top:55px}}
-@media(max-width:420px){.card{padding:15px;border-radius:17px}.hero{align-items:flex-start;flex-direction:column}.chat-form{gap:6px}.chat-form .btn{padding:10px}.clock{font-size:11px}.brand{letter-spacing:.6px}}
+:root{color-scheme:dark;--bg:#08080d;--panel:#111118;--neon:#ff243d;--neon2:#ff6374;--glow:rgba(255,36,61,.24);--line:rgba(255,50,75,.42);--text:#f8f4f7;--muted:#aaa2b0}
+*{box-sizing:border-box}html{min-height:100%;-webkit-text-size-adjust:100%}body{margin:0;min-height:100vh;overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,var(--glow),transparent 55%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
+body.purple{--neon:#b14cff;--neon2:#e0a7ff;--glow:rgba(153,47,255,.25);--line:rgba(184,87,255,.45)}
+button,input{font:inherit}button{cursor:pointer;color:inherit;-webkit-tap-highlight-color:transparent}button:focus,input:focus{outline-color:var(--neon2)}.hidden{display:none!important}
+.screen{width:100%;max-width:520px;min-height:100vh;margin:0 auto;padding:18px 14px 100px}
+.brand{font-size:clamp(17px,4.8vw,25px);font-weight:900;text-align:center;text-shadow:0 0 14px var(--glow);overflow-wrap:anywhere}.brand small{display:block;margin-top:6px;color:var(--neon2);font-size:9px;letter-spacing:2px}
+.neon{color:var(--neon2);text-shadow:0 0 10px var(--glow)}.card{background:linear-gradient(145deg,rgba(255,255,255,.04),transparent),var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:0 0 16px var(--glow)}
+.btn{display:inline-block;padding:12px 14px;border:1px solid var(--neon);border-radius:10px;background:linear-gradient(100deg,var(--neon),#9e1329);color:#fff;font-weight:bold;text-align:center;box-shadow:0 0 12px var(--glow)}body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{background:transparent;color:var(--neon2);box-shadow:none}
+.field{display:block;width:100%;min-width:0;padding:12px;margin:7px 0;border:1px solid var(--line);border-radius:10px;background:#08080d;color:white;outline:none}.field:focus{box-shadow:0 0 10px var(--glow)}.muted{color:var(--muted);font-size:12px;line-height:1.6}.center{text-align:center}
+.section-title{margin:23px 0 12px;color:var(--neon2);font-size:11px;font-weight:bold;letter-spacing:2px}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:5px 0 20px}.topbar .brand{text-align:left;font-size:14px}.mode-btn{flex-shrink:0;padding:9px 8px;border:1px solid var(--line);border-radius:9px;background:#111;color:var(--neon2);font-size:9px;font-weight:bold}
+.hero{padding:16px;overflow:hidden}.hero h1{font-size:25px;line-height:1.25;margin:14px 0}.anime-stage{position:relative;height:205px;margin-top:14px;overflow:hidden;border:1px solid var(--line);border-radius:13px;background:radial-gradient(ellipse at 50% 65%,var(--glow),transparent 60%),linear-gradient(160deg,#171321,#08080d)}
+.stars{position:absolute;inset:0;opacity:.7;background-image:radial-gradient(circle,#fff 1px,transparent 1.5px),radial-gradient(circle,var(--neon2) 1px,transparent 1.5px);background-size:43px 47px,71px 67px;animation:stars 12s linear infinite}@keyframes stars{to{background-position:100px 120px,-40px 80px}}
+.anime{position:absolute;left:50%;bottom:-10px;width:150px;height:185px;margin-left:-75px;animation:floaty 3s ease-in-out infinite}@keyframes floaty{50%{transform:translateY(-7px)}}
+.anime .hair{position:absolute;left:27px;top:10px;width:95px;height:100px;background:linear-gradient(135deg,#111,var(--neon),#171020,#050505);-webkit-clip-path:polygon(18% 0,80% 0,100% 35%,84% 47%,96% 90%,67% 67%,55% 100%,43% 68%,12% 90%,19% 47%,0 31%);clip-path:polygon(18% 0,80% 0,100% 35%,84% 47%,96% 90%,67% 67%,55% 100%,43% 68%,12% 90%,19% 47%,0 31%)}
+.anime .face{position:absolute;left:48px;top:38px;width:54px;height:65px;background:linear-gradient(110deg,#e8b7b5,#8d6576);-webkit-clip-path:polygon(5% 0,95% 0,90% 65%,50% 100%,10% 65%);clip-path:polygon(5% 0,95% 0,90% 65%,50% 100%,10% 65%)}
+.anime .eye{position:absolute;top:65px;width:15px;height:4px;background:var(--neon);box-shadow:0 0 8px var(--neon);border-radius:50%}.anime .eye.l{left:53px}.anime .eye.r{left:82px}
+.anime .body{position:absolute;left:22px;bottom:0;width:105px;height:100px;background:linear-gradient(115deg,#111,var(--neon),#101018);-webkit-clip-path:polygon(28% 0,72% 0,100% 100%,0 100%);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%)}
+.scan{position:absolute;inset:0;pointer-events:none;opacity:.3;background:linear-gradient(transparent 48%,rgba(255,255,255,.08) 50%,transparent 52%);background-size:100% 7px}
+.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:11px}.stat{padding:13px;min-width:0}.stat b{display:block;color:var(--neon2);font-size:15px;overflow-wrap:anywhere}.stat span{color:var(--muted);font-size:9px;letter-spacing:.6px}
+.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.tool{min-width:0;min-height:100px;padding:13px 10px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:13px}.tool:active,.orbit-node:active{opacity:.8}.tool .ico{display:block;margin-bottom:7px;font-size:23px}.tool b{display:block;font-size:11px;overflow-wrap:anywhere}.tool small{display:block;margin-top:5px;color:var(--muted);font-size:10px;line-height:1.4}
+.nav{position:fixed;z-index:10;bottom:0;left:0;right:0;width:100%;max-width:520px;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px;padding:8px 6px;padding-bottom:calc(8px + env(safe-area-inset-bottom,0px));background:rgba(8,8,13,.97);border-top:1px solid var(--line)}
+.nav button{min-width:0;padding:7px 1px;background:transparent;border:0;border-radius:8px;color:var(--muted);font-size:8px;font-weight:bold}.nav button span{display:block;margin-bottom:3px;font-size:19px}.nav button.active{color:var(--neon2);background:var(--glow)}
+.orbit-wrap{position:relative;width:100%;max-width:340px;height:290px;margin:5px auto 16px}.orbit-ring{position:absolute;left:50%;top:50%;width:210px;height:210px;margin:-105px 0 0 -105px;border:1px dashed var(--line);border-radius:50%;box-shadow:0 0 18px var(--glow),inset 0 0 18px var(--glow);animation:spin 18s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
+.orbit-ring:before,.orbit-ring:after{content:"";position:absolute;inset:18px;border:1px solid var(--line);border-radius:50%}.orbit-ring:after{inset:-12px;border-style:dotted}
+.core{position:absolute;left:50%;top:50%;width:100px;height:100px;margin:-50px 0 0 -50px;display:grid;place-items:center;border:2px solid var(--neon);border-radius:50%;background:radial-gradient(circle,var(--glow),#0b0a11 72%);box-shadow:0 0 23px var(--glow),inset 0 0 16px var(--glow);text-align:center;font-size:11px;font-weight:bold;pointer-events:none}.core strong{display:block;color:var(--neon2);font-size:22px}
+.orbit-node{position:absolute;width:82px;height:70px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid var(--line);border-radius:12px;background:#111018;color:var(--neon2);box-shadow:0 0 12px var(--glow);font-size:9px;font-weight:bold}.orbit-node i{font-size:20px;font-style:normal}.orbit-node:nth-of-type(2){left:50%;top:0;margin-left:-41px}.orbit-node:nth-of-type(3){right:0;top:50%;margin-top:-35px}.orbit-node:nth-of-type(4){left:50%;bottom:0;margin-left:-41px}.orbit-node:nth-of-type(5){left:0;top:50%;margin-top:-35px}
+.module-card{padding:15px}.status{padding:12px;margin-top:13px;border:1px solid var(--line);border-radius:11px;background:var(--glow);font-size:11px;line-height:1.6}
+.chatbox{height:390px;display:flex;flex-direction:column;overflow:hidden}.chat-head{padding:12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}.chat-head b{font-size:13px}.chat-head .muted{font-size:10px}
+.messages{flex:1;min-height:0;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:9px;-webkit-overflow-scrolling:touch}.msg{max-width:88%;padding:9px 11px;border:1px solid #39303d;border-radius:11px;background:#1a1820;font-size:12px;line-height:1.5;overflow-wrap:anywhere;white-space:pre-wrap}.msg.mine{align-self:flex-end;border-color:var(--line);background:var(--glow)}.msg small{display:block;margin-bottom:4px;color:var(--neon2);font-size:9px}
+.chat-form{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}.chat-form .field{flex:1;margin:0;min-width:0;padding:11px 9px}.chat-form .btn{flex-shrink:0;padding:10px 13px}.chat-join{padding:10px;border-bottom:1px solid var(--line)}.chat-join .field{margin:0 0 7px}.chat-join .btn{width:100%}
+.info-card{padding:16px;margin-bottom:12px}.info-row{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:12px;overflow-wrap:anywhere;text-align:left}.info-row:last-child{border:0}.info-row .ico{font-size:21px;flex-shrink:0}.info-card a{display:block;margin-top:10px;text-decoration:none}
+.footer{margin:24px 0;color:var(--muted);text-align:center;font-size:9px;letter-spacing:.7px}.toast{position:fixed;z-index:30;left:50%;bottom:92px;width:90%;max-width:360px;padding:11px 14px;border:1px solid var(--line);border-radius:11px;background:#19141e;box-shadow:0 0 16px var(--glow);font-size:12px;text-align:center;opacity:0;visibility:hidden;transform:translate(-50%,8px);transition:opacity .2s,transform .2s}.toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+@media(max-width:350px){.screen{padding-left:10px;padding-right:10px}.orbit-node{width:72px;height:66px;font-size:8px}.orbit-node:nth-of-type(2),.orbit-node:nth-of-type(4){margin-left:-36px}.orbit-ring{width:180px;height:180px;margin:-90px 0 0 -90px}.core{width:86px;height:86px;margin:-43px 0 0 -43px}.topbar .brand{font-size:11px}.mode-btn{padding:8px 5px;font-size:8px}.nav button{font-size:7px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
-<header class="wrap">
-  <div class="topline">
-    <div>
-      <div class="brand">KING <span>DAFFZZ</span></div>
-      <div class="eyebrow">HOLLOW • HOLOGRAM PANEL</div>
-    </div>
-    <div class="clock">◷ <span id="clock">--:--</span></div>
-  </div>
+<main id="appScreen" class="screen">
+<header class="topbar">
+  <div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>NEURAL CONTROL PANEL</small></div>
+  <button id="modeBtn" class="mode-btn" type="button">◉ MODE UNGU</button>
 </header>
 
-<main class="wrap">
-  <section id="loginScreen" class="card login-card">
-    <div class="login-mark">✦</div>
-    <div class="eyebrow">WELCOME TO HOLLOW</div>
-    <h1>Masuk ke panel</h1>
-    <p class="muted">Masukkan nama panggilan apa saja untuk masuk dan ikut public chat. Tidak perlu password atau verifikasi.</p>
-    <form id="loginForm">
-      <label for="username">NAMA PANGGILAN</label>
-      <input id="username" name="username" maxlength="24" autocomplete="nickname" placeholder="Contoh: Daffzz" required>
-      <button class="btn primary full" type="submit">MASUK KE PANEL ↗</button>
-    </form>
-    <p class="muted" style="margin:14px 0 0">Catatan: nama bebas bukan akun terverifikasi. Orang lain dapat memakai nama yang sama.</p>
-  </section>
+<section id="dashboardPage" class="page">
+  <div class="hero card">
+    <div class="neon" style="font-size:10px;letter-spacing:2px">SYSTEM STATUS // <span id="systemState">CONNECTING</span></div>
+    <h1>WELCOME TO<br><span class="neon">KING DAFFZZ</span></h1>
+    <p class="muted">Hologram interface futuristik. Pilih menu dan jelajahi panel.</p>
+    <div class="anime-stage"><div class="stars"></div><div class="anime"><div class="body"></div><div class="face"></div><div class="hair"></div><div class="eye l"></div><div class="eye r"></div></div><div class="scan"></div><div style="position:absolute;left:10px;bottom:9px;font-size:9px;letter-spacing:1px;color:var(--neon2)">ANIME CYBER // VISUAL FX</div></div>
+  </div>
+  <div class="stat-grid">
+    <div class="stat card"><b id="serverStatus">● MEMERIKSA</b><span>STATUS SERVER</span></div>
+    <div class="stat card"><b id="clock">--:--</b><span>WAKTU PERANGKAT</span></div>
+    <div class="stat card"><b>02</b><span>UI THEMES</span></div>
+    <div class="stat card"><b id="onlineCount">--</b><span>KONEKSI SOCKET</span></div>
+  </div>
+  <div class="section-title">◈ QUICK ACCESS</div>
+  <div class="tool-grid">
+    <button class="tool" data-goto="bugPage" type="button"><span class="ico">🌀</span><b>BUG PANEL</b><small>Modul visual simulasi</small></button>
+    <button class="tool" data-goto="chatPage" type="button"><span class="ico">💬</span><b>PUBLIC CHAT</b><small>Chat antarpengguna online</small></button>
+  </div>
+</section>
 
-  <section id="appScreen" class="hidden">
-    <div class="hero">
-      <div>
-        <div class="eyebrow">CONTROL CENTER</div>
-        <h1 style="margin:5px 0">Halo, <span id="welcomeName">Member</span> ✦</h1>
-        <p class="muted">Selamat datang di Hollow DAFZZ.</p>
-      </div>
-      <div class="row">
-        <button class="btn small" id="modeBtn" type="button">◉ MODE UNGU</button>
-        <button class="btn small" id="logoutBtn" type="button">KELUAR</button>
-      </div>
-    </div>
+<section id="bugPage" class="page hidden">
+  <div class="section-title">◈ HOLOGRAM COMMAND CENTER</div>
+  <div class="orbit-wrap"><div class="orbit-ring"></div><div class="core"><div><strong>𓆩✦𓆪</strong>KING<br>DAFFZZ</div></div>
+    <button class="orbit-node" data-panel="bugTools" type="button"><i>☠</i>BUG</button>
+    <button class="orbit-node" data-panel="senderTools" type="button"><i>➤</i>SENDER</button>
+    <button class="orbit-node" data-panel="banTools" type="button"><i>⬡</i>BAN GROUP</button>
+    <button class="orbit-node" data-panel="customTools" type="button"><i>⌘</i>BUG CUSTOM</button>
+  </div>
+  <div class="section-title">◈ SELECT MODULE</div>
+  <div id="bugTools" class="tool-grid module">
+    <button class="tool sim" data-name="DELAY HARD" type="button"><span class="ico">⏳</span><b>DELAY HARD</b><small>Preview simulasi</small></button>
+    <button class="tool sim" data-name="FOR CLOSE" type="button"><span class="ico">⛔</span><b>FOR CLOSE</b><small>Preview simulasi</small></button>
+    <button class="tool sim" data-name="SPAM OTP" type="button"><span class="ico">📨</span><b>SPAM OTP</b><small>Preview simulasi</small></button>
+    <button class="tool sim" data-name="BULDO CRASH" type="button"><span class="ico">💥</span><b>BULDO CRASH</b><small>Preview simulasi</small></button>
+    <button class="tool sim" data-name="LOCK CHAT" type="button"><span class="ico">🔒</span><b>LOCK CHAT</b><small>Preview simulasi</small></button>
+  </div>
+  <div id="senderTools" class="module hidden card module-card"><b class="neon">➤ SENDER</b><p class="muted">Panel sender demo. Tidak mengirim pesan otomatis atau massal.</p><button class="btn ghost sim" data-name="SENDER" type="button">BUKA SIMULASI</button></div>
+  <div id="banTools" class="module hidden card module-card"><b class="neon">⬡ BAN GROUP</b><p class="muted">Pratinjau kontrol grup. Tidak mengubah grup sungguhan.</p><button class="btn ghost sim" data-name="BAN GROUP" type="button">BUKA SIMULASI</button></div>
+  <div id="customTools" class="module hidden card module-card"><b class="neon">⌘ BUG CUSTOM</b><p class="muted">Simpan nama preset visual untuk sesi halaman ini.</p><input class="field" id="customName" maxlength="40" placeholder="Nama preset visual"><button id="customBtn" class="btn" style="width:100%" type="button">SIMPAN PRESET DEMO</button><p id="presetResult" class="muted"></p></div>
+  <div class="status">⚠ <b>DEMO MODE:</b> Semua modul hanya simulasi visual. Tidak menjalankan spam, crash, atau tindakan terhadap akun dan perangkat.</div>
+</section>
 
-    <nav id="nav" class="nav" aria-label="Navigasi utama">
-      <button class="btn active" type="button" data-page="homePage">⌂ Home</button>
-      <button class="btn" type="button" data-page="chatPage">▤ Public Chat</button>
-      <button class="btn" type="button" data-page="toolsPage">✦ Menu</button>
-      <button class="btn" type="button" data-page="senderPage">↗ Sender Demo</button>
-    </nav>
+<section id="chatPage" class="page hidden">
+  <div class="section-title">◈ PUBLIC CHAT // ONLINE</div>
+  <div class="chatbox card">
+    <div class="chat-head"><div><b>🌐 Public Room</b><div class="muted" id="chatStatus">Menghubungkan ke server...</div></div><span id="chatLamp" class="neon">● OFFLINE</span></div>
+    <div id="joinArea" class="chat-join"><label class="muted" for="chatUsername">NAMA PANGGILAN</label><input id="chatUsername" class="field" maxlength="24" autocomplete="nickname" placeholder="Masukkan nama panggilan"><button id="joinBtn" class="btn" type="button">MASUK PUBLIC CHAT</button></div>
+    <div id="messages" class="messages" aria-live="polite"><div class="msg"><small>SYSTEM</small>Masukkan nama panggilan untuk mulai chat.</div></div>
+    <form id="chatForm" class="chat-form"><input id="chatInput" class="field" maxlength="1000" placeholder="Tulis pesan..." autocomplete="off" disabled required><button id="sendBtn" class="btn" type="submit" disabled>➤</button></form>
+  </div>
+  <p class="muted">Chat memakai Socket.IO. Nama panggilan bukan akun. Riwayat saat ini tersimpan sementara di memori server.</p>
+</section>
 
-    <section id="homePage" class="page">
-      <div class="grid">
-        <div class="stat"><span>STATUS PANEL</span><strong style="color:var(--good)">ONLINE</strong></div>
-        <div class="stat"><span>IDENTITAS</span><strong id="statName" style="font-size:18px;overflow-wrap:anywhere">Member</strong></div>
-        <div class="stat"><span>CHAT</span><strong>LIVE</strong></div>
-        <div class="stat"><span>JAM LOKAL</span><strong id="clockLarge">--:--</strong></div>
-      </div>
-      <div class="card section">
-        <div class="section-head"><h2>Menu cepat</h2><span class="status-pill online">● SIAP</span></div>
-        <div class="quick-grid">
-          <button class="quick" type="button" data-goto="chatPage"><b>▤ Public Chat</b><span>Ngobrol dengan pengguna lain</span></button>
-          <button class="quick" type="button" data-goto="toolsPage"><b>✦ Menu Panel</b><span>Buka modul yang tersedia</span></button>
-          <button class="quick" type="button" data-goto="senderPage"><b>↗ Sender Demo</b><span>Pengaturan demo lokal</span></button>
-          <button class="quick" type="button" id="homeModeBtn"><b>◉ Ganti Tema</b><span>Merah atau ungu</span></button>
-        </div>
-      </div>
-      <div class="notice section">Public chat memakai koneksi server. Jangan kirim password, nomor pribadi, atau informasi rahasia ke ruang publik.</div>
-    </section>
-
-    <section id="chatPage" class="page hidden">
-      <div class="card">
-        <div class="section-head">
-          <div><div class="eyebrow">GLOBAL ROOM</div><h2 style="margin:4px 0 0">Public Chat</h2></div>
-          <span id="chatStatus" class="status-pill offline">● MENGHUBUNGKAN</span>
-        </div>
-        <p class="muted">Pesan dapat dibaca pengguna lain yang sedang terhubung. Gunakan bahasa yang sopan.</p>
-        <div class="chat-shell">
-          <div class="chat-top"><strong>✦ #hollow-public</strong><span class="muted">Maks. 100 pesan ditampilkan</span></div>
-          <div id="messages" class="messages" aria-live="polite"><div class="muted">Menghubungkan ke chat...</div></div>
-          <form id="chatForm" class="chat-form">
-            <input id="chatInput" maxlength="1000" placeholder="Tulis pesan..." autocomplete="off" aria-label="Pesan chat" required>
-            <button class="btn primary" type="submit">KIRIM</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <section id="toolsPage" class="page hidden">
-      <div class="card">
-        <div class="eyebrow">MODULE CENTER</div><h2>Menu Orbit</h2>
-        <p class="muted">Modul di bawah ini adalah tampilan simulasi dan tidak menjalankan aksi eksternal.</p>
-        <div class="module-grid">
-          <button class="orbit-node selected" type="button" data-panel="bugTools"><strong>✦ BUG</strong><span>Modul simulasi</span></button>
-          <button class="orbit-node" type="button" data-panel="senderTools"><strong>↗ SENDER</strong><span>Modul simulasi</span></button>
-          <button class="orbit-node" type="button" data-panel="banTools"><strong>⊘ BAN GROUP</strong><span>Modul simulasi</span></button>
-          <button class="orbit-node" type="button" data-panel="customTools"><strong>⚙ BUG CUSTOM</strong><span>Preset visual lokal</span></button>
-        </div>
-        <div id="bugTools" class="module">
-          <h3>BUG MODULE</h3><p class="muted">Area demo antarmuka. Tidak mengirim bug atau mengganggu perangkat lain.</p>
-          <button class="btn sim" type="button" data-name="BUG">JALANKAN SIMULASI</button>
-        </div>
-        <div id="senderTools" class="module hidden">
-          <h3>SENDER MODULE</h3><p class="muted">Demo tampilan sender saja, tanpa mengirim pesan eksternal.</p>
-          <button class="btn sim" type="button" data-name="SENDER">JALANKAN SIMULASI</button>
-        </div>
-        <div id="banTools" class="module hidden">
-          <h3>BAN GROUP MODULE</h3><p class="muted">Demo antarmuka saja. Tidak melakukan ban atau tindakan pada grup sungguhan.</p>
-          <button class="btn sim" type="button" data-name="BAN GROUP">JALANKAN SIMULASI</button>
-        </div>
-        <div id="customTools" class="module hidden">
-          <h3>BUG CUSTOM / PRESET VISUAL</h3><p class="muted">Buat label preset lokal untuk tampilan panel.</p>
-          <div class="row"><input id="customName" maxlength="40" placeholder="Nama preset visual"><button class="btn primary" id="customBtn" type="button">SIMPAN</button></div>
-          <div id="presetList" class="preset-list"></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="senderPage" class="page hidden">
-      <div class="card">
-        <div class="eyebrow">DEMO CONFIGURATION</div><h2>Sender Demo</h2>
-        <p class="muted">Ini hanya simulasi lokal untuk menguji antarmuka. Tidak menghubungkan akun WhatsApp atau layanan eksternal.</p>
-        <label for="senderLabel">LABEL SENDER</label>
-        <input id="senderLabel" maxlength="40" placeholder="DAFFZZ-DEMO">
-        <div class="row" style="margin-top:12px">
-          <button class="btn primary" id="linkSenderBtn" type="button">🔗 TAUTKAN SENDER DEMO</button>
-          <button class="btn" id="unlinkSenderBtn" type="button">PUTUSKAN</button>
-        </div>
-        <p id="senderBadge" class="status-pill offline" style="margin-top:17px">● BELUM DITAUTKAN</p>
-        <p id="senderDetail" class="muted">Belum ada sender demo yang ditautkan.</p>
-      </div>
-    </section>
-  </section>
+<section id="infoPage" class="page hidden">
+  <div class="section-title">◈ DEVELOPER INFORMATION</div>
+  <div class="info-card card center">
+    <div style="width:82px;height:82px;margin:8px auto 18px;display:grid;place-items:center;border:1px solid var(--neon);border-radius:50%;box-shadow:0 0 22px var(--glow);font-size:32px;color:var(--neon2)">✦</div>
+    <div class="neon" style="font-weight:900;font-size:15px">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪</div><p class="muted">DEVELOPER</p>
+    <div style="height:1px;background:var(--line);margin:17px 0"></div>
+    <div class="info-row"><span class="ico">📱</span><div><b>WhatsApp Owner</b><br><span class="muted">+62 851-5183-3180</span></div></div>
+    <div class="info-row"><span class="ico">✉️</span><div><b>Email</b><br><span class="muted">ubaydillahdaffa7@gmail.com</span></div></div>
+    <a class="btn" href="https://wa.me/6285151833180" target="_blank" rel="noopener noreferrer">HUBUNGI VIA WHATSAPP ↗</a>
+    <a class="btn ghost" href="mailto:ubaydillahdaffa7@gmail.com">KIRIM EMAIL ↗</a>
+  </div>
+  <div class="status">✦ KING DAFFZZ UI • Hologram interface • Demo modules</div>
+</section>
+<div class="footer">KING DAFFZZ • HOLOGRAM INTERFACE</div>
 </main>
-<footer class="wrap">KING DAFFZZ · HOLLOW PANEL · PUBLIC CHAT</footer>
-<div id="toast" role="status" aria-live="polite"></div>
 
-<!-- Socket.IO client disediakan otomatis oleh server.js -->
+<nav id="nav" class="nav" aria-label="Navigasi utama">
+  <button class="active" data-page="dashboardPage" type="button"><span>⌂</span>DASHBOARD</button>
+  <button data-page="bugPage" type="button"><span>◉</span>BUG</button>
+  <button data-page="chatPage" type="button"><span>▤</span>PUBLIC CHAT</button>
+  <button data-page="infoPage" type="button"><span>ⓘ</span>INFO</button>
+</nav>
+<div id="toast" class="toast" role="status"></div>
+
+<!-- Socket.IO client disediakan otomatis oleh server Socket.IO -->
 <script src="/socket.io/socket.io.js"></script>
 <script>
+(function(){
 "use strict";
-
-const loginScreen = document.getElementById("loginScreen");
-const appScreen = document.getElementById("appScreen");
-const nav = document.getElementById("nav");
-const loginForm = document.getElementById("loginForm");
-const usernameInput = document.getElementById("username");
-const messagesBox = document.getElementById("messages");
-const chatForm = document.getElementById("chatForm");
-const chatInput = document.getElementById("chatInput");
-const chatStatus = document.getElementById("chatStatus");
-let myUsername = sessionStorage.getItem("hollow_username") || "";
-let socket = null;
-const displayedMessageIds = new Set();
-
-function toast(message) {
-  const el = document.getElementById("toast");
-  el.textContent = message;
-  el.classList.add("show");
-  clearTimeout(window.toastTimer);
-  window.toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
+var socket=null, joined=false, username="", toastTimer=null;
+function byId(id){return document.getElementById(id);}
+function toast(text){
+  var el=byId("toast");el.textContent=text;el.classList.add("show");
+  if(toastTimer) clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){el.classList.remove("show");},2400);
 }
-function enterPanel(username) {
-  myUsername = username.trim().slice(0, 24);
-  if (!myUsername) return;
-  sessionStorage.setItem("hollow_username", myUsername);
-  loginScreen.classList.add("hidden");
-  appScreen.classList.remove("hidden");
-  nav.classList.remove("hidden");
-  document.getElementById("welcomeName").textContent = myUsername;
-  document.getElementById("statName").textContent = myUsername;
-  connectChat();
-  toast("Berhasil masuk sebagai " + myUsername);
+function showPage(id){
+  var pages=document.querySelectorAll(".page"),i;
+  for(i=0;i<pages.length;i++) pages[i].classList.toggle("hidden",pages[i].id!==id);
+  var buttons=document.querySelectorAll(".nav button");
+  for(i=0;i<buttons.length;i++) buttons[i].classList.toggle("active",buttons[i].getAttribute("data-page")===id);
+  window.scrollTo(0,0);
 }
-loginForm.addEventListener("submit", function(e) {
-  e.preventDefault();
-  const username = usernameInput.value.trim().slice(0, 24);
-  if (!username) {
-    toast("Isi nama panggilan dulu.");
-    usernameInput.focus();
-    return;
-  }
-  enterPanel(username);
-});
-document.getElementById("logoutBtn").addEventListener("click", () => {
-  if (socket) { socket.disconnect(); socket = null; }
-  sessionStorage.removeItem("hollow_username");
-  myUsername = "";
-  appScreen.classList.add("hidden");
-  loginScreen.classList.remove("hidden");
-  usernameInput.value = "";
-  messagesBox.replaceChildren();
-  displayedMessageIds.clear();
-  chatStatus.textContent = "● BELUM MASUK";
-  chatStatus.className = "status-pill offline";
-  toast("Berhasil keluar.");
-});
-function showPage(pageId) {
-  document.querySelectorAll(".page").forEach(p => p.classList.toggle("hidden", p.id !== pageId));
-  document.querySelectorAll("#nav button").forEach(b => b.classList.toggle("active", b.dataset.page === pageId));
-  if (pageId === "chatPage" && socket && !socket.connected) socket.connect();
-  window.scrollTo({top:0,behavior:"smooth"});
+var navButtons=document.querySelectorAll(".nav button");
+for(var n=0;n<navButtons.length;n++){
+  navButtons[n].addEventListener("click",function(){showPage(this.getAttribute("data-page"));});
 }
-nav.querySelectorAll("button").forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
-document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => showPage(b.dataset.goto)));
-function toggleMode() {
+var quick=document.querySelectorAll("[data-goto]");
+for(var q=0;q<quick.length;q++){
+  quick[q].addEventListener("click",function(){showPage(this.getAttribute("data-goto"));});
+}
+byId("modeBtn").addEventListener("click",function(){
   document.body.classList.toggle("purple");
-  const purple = document.body.classList.contains("purple");
-  document.getElementById("modeBtn").textContent = purple ? "◉ MODE MERAH" : "◉ MODE UNGU";
-  toast(purple ? "Tema ungu-hitam aktif" : "Tema merah-hitam aktif");
-}
-document.getElementById("modeBtn").addEventListener("click", toggleMode);
-document.getElementById("homeModeBtn").addEventListener("click", toggleMode);
-
-function selectModule(panelId) {
-  document.querySelectorAll(".module").forEach(m => m.classList.toggle("hidden", m.id !== panelId));
-  document.querySelectorAll(".orbit-node").forEach(b => b.classList.toggle("selected", b.dataset.panel === panelId));
-  const names = {bugTools:"BUG",senderTools:"SENDER",banTools:"BAN GROUP",customTools:"BUG CUSTOM"};
-  toast("Menu " + (names[panelId] || "modul") + " dibuka");
-}
-document.querySelectorAll(".orbit-node").forEach(b => b.addEventListener("click", () => selectModule(b.dataset.panel)));
-document.querySelectorAll(".sim").forEach(b => b.addEventListener("click", () => toast("SIMULASI: " + (b.dataset.name || "modul") + " — tidak ada aksi eksternal.")));
-
-document.getElementById("customBtn").addEventListener("click", () => {
-  const input = document.getElementById("customName");
-  const name = input.value.trim();
-  if (!name) { toast("Isi nama preset visual dulu."); return; }
-  const item = document.createElement("div");
-  item.textContent = "✦ Preset tersimpan: " + name;
-  document.getElementById("presetList").appendChild(item);
-  input.value = "";
-  toast('Preset "' + name + '" disimpan sementara.');
+  this.textContent=document.body.classList.contains("purple")?"◉ MODE MERAH":"◉ MODE UNGU";
+  toast(document.body.classList.contains("purple")?"Tema ungu aktif":"Tema merah aktif");
 });
-
-let senderLinked = false;
-function renderSender() {
-  const badge = document.getElementById("senderBadge");
-  const detail = document.getElementById("senderDetail");
-  const label = document.getElementById("senderLabel");
-  badge.className = "status-pill " + (senderLinked ? "online" : "offline");
-  badge.textContent = senderLinked ? "● SUDAH DITAUTKAN" : "● BELUM DITAUTKAN";
-  detail.textContent = senderLinked ? "Sender demo aktif: " + (label.value.trim() || "DAFFZZ-DEMO") : "Belum ada sender demo yang ditautkan.";
-  document.getElementById("linkSenderBtn").textContent = senderLinked ? "✓ SENDER DEMO TERTAUT" : "🔗 TAUTKAN SENDER DEMO";
+var orbit=document.querySelectorAll(".orbit-node");
+for(var o=0;o<orbit.length;o++){
+  orbit[o].addEventListener("click",function(){
+    var modules=document.querySelectorAll(".module");
+    for(var j=0;j<modules.length;j++) modules[j].classList.add("hidden");
+    var chosen=byId(this.getAttribute("data-panel"));if(chosen)chosen.classList.remove("hidden");
+    toast("Modul "+this.textContent.trim()+" dipilih");
+  });
 }
-document.getElementById("linkSenderBtn").addEventListener("click", () => {
-  senderLinked = true;
-  if (!document.getElementById("senderLabel").value.trim()) document.getElementById("senderLabel").value = "DAFFZZ-DEMO";
-  renderSender();
-  toast("Sender demo ditautkan secara lokal.");
-});
-document.getElementById("unlinkSenderBtn").addEventListener("click", () => {
-  senderLinked = false;
-  renderSender();
-  toast("Tautan sender demo diputuskan.");
-});
-document.getElementById("senderLabel").addEventListener("input", () => { if (senderLinked) renderSender(); });
-
-function renderChatMessage(data) {
-  if (!data || !data.id || displayedMessageIds.has(data.id)) return;
-  displayedMessageIds.add(data.id);
-  const msg = document.createElement("div");
-  msg.className = "msg";
-  if (data.username === myUsername) msg.classList.add("mine");
-  const label = document.createElement("small");
-  const time = data.time ? new Date(data.time) : new Date();
-  label.textContent = (data.username || "Member") + " • " + time.toLocaleTimeString("id-ID", {hour:"2-digit",minute:"2-digit"});
-  msg.appendChild(label);
-  msg.appendChild(document.createTextNode(String(data.message || "")));
-  messagesBox.appendChild(msg);
-  while (messagesBox.children.length > 100) messagesBox.removeChild(messagesBox.firstChild);
-  messagesBox.scrollTop = messagesBox.scrollHeight;
+var sims=document.querySelectorAll(".sim");
+for(var s=0;s<sims.length;s++){
+  sims[s].addEventListener("click",function(){toast("SIMULASI: "+(this.getAttribute("data-name")||"modul")+" — tidak ada aksi nyata.");});
 }
-function connectChat() {
-  if (typeof window.io !== "function") {
-    chatStatus.textContent = "● SOCKET.IO TIDAK TERSEDIA";
-    chatStatus.className = "status-pill offline";
-    messagesBox.textContent = "Library Socket.IO tidak termuat. Periksa server.js.";
+byId("customBtn").addEventListener("click",function(){
+  var value=byId("customName").value.trim();
+  if(!value){toast("Isi nama preset dulu.");return;}
+  byId("presetResult").textContent="Preset visual sementara: "+value;
+  toast("Preset visual ditampilkan.");
+});
+function updateClock(){
+  var now=new Date();
+  byId("clock").textContent=now.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+}
+updateClock();setInterval(updateClock,10000);
+
+function setConnection(online){
+  byId("systemState").textContent=online?"ONLINE":"OFFLINE";
+  byId("serverStatus").textContent=online?"● ONLINE":"● OFFLINE";
+  byId("chatLamp").textContent=online?"● ONLINE":"● OFFLINE";
+  byId("chatStatus").textContent=online?"Terhubung ke server":"Koneksi terputus; mencoba kembali...";
+  byId("onlineCount").textContent=online?"AKTIF":"--";
+  if(!online){joined=false;byId("joinArea").classList.remove("hidden");byId("chatInput").disabled=true;byId("sendBtn").disabled=true;}
+}
+function addMessage(item,mine){
+  if(!item || typeof item.message!=="string")return;
+  var box=byId("messages"),row=document.createElement("div"),label=document.createElement("small");
+  row.className="msg"+(mine?" mine":"");
+  var name=typeof item.username==="string"?item.username:"SYSTEM";
+  label.textContent=name+" • "+formatTime(item.time);
+  row.appendChild(label);row.appendChild(document.createTextNode(item.message));
+  box.appendChild(row);
+  while(box.children.length>120)box.removeChild(box.firstChild);
+  box.scrollTop=box.scrollHeight;
+}
+function formatTime(value){
+  if(!value)return "BARU SAJA";
+  var d=new Date(value);if(isNaN(d.getTime()))return "BARU SAJA";
+  return d.toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
+}
+function connectSocket(){
+  if(typeof window.io!=="function"){
+    setConnection(false);
+    byId("chatStatus").textContent="Socket.IO client tidak termuat. Periksa server.";
     return;
   }
-  if (socket) socket.disconnect();
-  socket = window.io({transports:["websocket","polling"]});
-  socket.on("connect", () => {
-    chatStatus.textContent = "● ONLINE";
-    chatStatus.className = "status-pill online";
-    socket.emit("chat:join", myUsername);
+  socket=window.io({transports:["websocket","polling"]});
+  socket.on("connect",function(){setConnection(true);toast("Terhubung ke server.");});
+  socket.on("disconnect",function(){setConnection(false);});
+  socket.on("connect_error",function(){setConnection(false);});
+  socket.on("chat:history",function(history){
+    var box=byId("messages");box.textContent="";
+    if(!history||!history.length){addMessage({username:"SYSTEM",message:"Belum ada pesan. Mulai percakapan!"},false);return;}
+    for(var i=0;i<history.length;i++)addMessage(history[i],history[i].username===username);
   });
-  socket.on("disconnect", () => {
-    chatStatus.textContent = "● TERPUTUS";
-    chatStatus.className = "status-pill offline";
+  socket.on("chat:joined",function(data){
+    joined=true;byId("joinArea").classList.add("hidden");
+    byId("chatInput").disabled=false;byId("sendBtn").disabled=false;
+    byId("chatStatus").textContent="Masuk sebagai "+data.username;
+    toast(data.message||"Berhasil masuk chat.");
+    byId("chatInput").focus();
   });
-  socket.on("connect_error", () => {
-    chatStatus.textContent = "● GAGAL TERHUBUNG";
-    chatStatus.className = "status-pill offline";
-  });
-  socket.on("chat:history", history => {
-    messagesBox.replaceChildren();
-    displayedMessageIds.clear();
-    if (Array.isArray(history) && history.length) history.slice(-100).forEach(renderChatMessage);
-    else {
-      const empty = document.createElement("div");
-      empty.className = "muted";
-      empty.textContent = "Belum ada pesan. Jadilah yang pertama menyapa!";
-      messagesBox.appendChild(empty);
-    }
-  });
-  socket.on("chat:new", data => {
-    const empty = messagesBox.querySelector(".muted");
-    if (empty && messagesBox.children.length === 1) messagesBox.replaceChildren();
-    renderChatMessage(data);
-  });
-  socket.on("chat:joined", data => { if (data && data.message) toast(data.message); });
+  socket.on("chat:new",function(item){addMessage(item,item.username===username);});
 }
-chatForm.addEventListener("submit", e => {
-  e.preventDefault();
-  const message = chatInput.value.trim();
-  if (!message) return;
-  if (!socket || !socket.connected) { toast("Server chat belum terhubung."); return; }
-  socket.emit("chat:send", {message:message.slice(0,1000)});
-  chatInput.value = "";
-  chatInput.focus();
+byId("joinBtn").addEventListener("click",function(){
+  var value=byId("chatUsername").value.trim();
+  if(!value){toast("Masukkan nama panggilan dulu.");return;}
+  if(value.length>24)value=value.slice(0,24);
+  if(!socket||!socket.connected){toast("Server belum terhubung. Tunggu sebentar.");return;}
+  username=value;socket.emit("chat:join",username);
 });
-function updateClock() {
-  const time = new Date().toLocaleTimeString("id-ID",{hour:"2-digit",minute:"2-digit"});
-  document.getElementById("clock").textContent = time;
-  document.getElementById("clockLarge").textContent = time;
-}
-updateClock();
-setInterval(updateClock, 10000);
-renderSender();
-if (myUsername) {
-  usernameInput.value = myUsername;
-  enterPanel(myUsername);
-}
+byId("chatForm").addEventListener("submit",function(event){
+  event.preventDefault();
+  var input=byId("chatInput"),message=input.value.trim();
+  if(!message)return;
+  if(!socket||!socket.connected){toast("Koneksi server terputus.");return;}
+  if(!joined){toast("Masuk ke Public Chat dulu.");return;}
+  socket.emit("chat:send",{message:message});
+  input.value="";
+});
+fetch("/api/status").then(function(response){
+  if(!response.ok)throw new Error("status");
+  return response.json();
+}).then(function(data){
+  byId("serverStatus").textContent="● ONLINE";
+  byId("systemState").textContent="ONLINE";
+  if(typeof data.online==="number")byId("onlineCount").textContent=String(data.online);
+}).catch(function(){
+  byId("serverStatus").textContent="● CEK KONEKSI";
+});
+connectSocket();
+})();
 </script>
 </body>
 </html>
