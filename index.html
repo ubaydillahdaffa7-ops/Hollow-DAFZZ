@@ -1,135 +1,4 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="theme-color" content="#08080d">
-<title>KING DAFFZZ | HOLOGRAM PANEL</title>
-<script src="/socket.io/socket.io.js"></script>
-<style>
-:root{--bg:#08080d;--panel:#111118;--neon:#ff243d;--neon2:#ff6374;--glow:rgba(255,36,61,.36);--line:rgba(255,50,75,.42);--text:#f8f4f7;--muted:#aaa2b0}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-body{overflow-x:hidden;background:radial-gradient(ellipse at 50% 0%,var(--glow),transparent 55%),var(--bg)}
-body.purple{--neon:#b14cff;--neon2:#e0a7ff;--glow:rgba(153,47,255,.34);--line:rgba(184,87,255,.45)}
-button,input{font:inherit}button{cursor:pointer;color:inherit}.hidden{display:none!important}
-.screen{position:relative;z-index:1;width:100%;max-width:520px;min-height:100vh;margin:auto;padding:20px 15px 100px}
-.brand{font-size:clamp(19px,5vw,26px);font-weight:900;text-align:center;text-shadow:0 0 15px var(--glow);overflow-wrap:anywhere}
-.brand small{display:block;margin-top:7px;color:var(--neon2);font-size:9px;letter-spacing:3px}.neon{color:var(--neon2);text-shadow:0 0 12px var(--glow)}
-.card{background:linear-gradient(145deg,rgba(255,255,255,.05),transparent),var(--panel);border:1px solid var(--line);border-radius:17px;box-shadow:0 0 22px var(--glow)}
-.btn{padding:12px 15px;border:1px solid var(--neon);border-radius:11px;background:linear-gradient(100deg,var(--neon),#9e1329);color:white;font-weight:800;box-shadow:0 0 15px var(--glow)}
-body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{background:transparent;color:var(--neon2);box-shadow:none}
-.field{width:100%;padding:13px;margin:7px 0;color:white;background:#08080d;border:1px solid var(--line);border-radius:10px;outline:none}.field:focus{box-shadow:0 0 12px var(--glow)}
-.muted{color:var(--muted);font-size:12px;line-height:1.6}.center{text-align:center}.section-title{margin:24px 0 13px;color:var(--neon2);font-size:12px;font-weight:bold;letter-spacing:2px}
-.login-wrap{min-height:85vh;display:flex;flex-direction:column;justify-content:center;gap:22px}.login-art{height:150px;display:grid;place-items:center;position:relative}
-.login-orb{position:relative;width:110px;height:110px;display:grid;place-items:center;border:1px solid var(--neon);border-radius:50%;color:var(--neon2);font-size:42px;box-shadow:0 0 28px var(--glow),inset 0 0 25px var(--glow);animation:float 3s ease-in-out infinite}
-.login-orb:before,.login-orb:after{content:"";position:absolute;width:145px;height:55px;border:1px solid var(--line);border-radius:50%;animation:spin 8s linear infinite}.login-orb:after{transform:rotate(60deg);animation-direction:reverse}
-@keyframes spin{to{rotate:360deg}}@keyframes float{50%{translate:0 -8px}}
-.login-form{padding:20px}.login-form .btn{width:100%;margin-top:12px}
-.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:5px 0 22px}.topbar .brand{font-size:15px;text-align:left}
-.mode-btn{flex-shrink:0;padding:10px;color:var(--neon2);background:#111;border:1px solid var(--line);border-radius:10px;font-size:10px;font-weight:bold}
-.hero{padding:17px;overflow:hidden}.hero h1{font-size:25px;line-height:1.2}
-.anime-stage{height:220px;margin-top:15px;position:relative;overflow:hidden;border:1px solid var(--line);border-radius:14px;background:radial-gradient(ellipse at 50% 65%,var(--glow),transparent 60%),linear-gradient(160deg,#171321,#08080d)}
-.stars{position:absolute;inset:0;opacity:.7;background-image:radial-gradient(circle,#fff 1px,transparent 1.5px),radial-gradient(circle,var(--neon2) 1px,transparent 1.5px);background-size:43px 47px,71px 67px;animation:stars 12s linear infinite}
-@keyframes stars{to{background-position:100px 120px,-40px 80px}}
-.anime{position:absolute;left:50%;bottom:-10px;width:150px;height:195px;transform:translateX(-50%);animation:float 3s ease-in-out infinite}
-.anime .hair{position:absolute;left:27px;top:10px;width:95px;height:100px;background:linear-gradient(135deg,#111,var(--neon),#171020,#050505);clip-path:polygon(18% 0,80% 0,100% 35%,84% 47%,96% 90%,67% 67%,55% 100%,43% 68%,12% 90%,19% 47%,0 31%);filter:drop-shadow(0 0 8px var(--glow))}
-.anime .face{position:absolute;left:48px;top:38px;width:54px;height:65px;background:linear-gradient(110deg,#e8b7b5,#8d6576);clip-path:polygon(5% 0,95% 0,90% 65%,50% 100%,10% 65%)}
-.anime .eye{position:absolute;top:65px;width:15px;height:4px;background:var(--neon);box-shadow:0 0 8px var(--neon);border-radius:50%}.anime .eye.l{left:53px}.anime .eye.r{left:82px}
-.anime .body{position:absolute;left:22px;bottom:0;width:105px;height:100px;background:linear-gradient(115deg,#111,var(--neon),#101018);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%)}
-.scan{position:absolute;inset:0;pointer-events:none;opacity:.4;background:linear-gradient(transparent 48%,rgba(255,255,255,.08) 50%,transparent 52%);background-size:100% 7px}
-.stat-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}.stat{padding:14px}.stat b{display:block;color:var(--neon2);font-size:17px}.stat span{color:var(--muted);font-size:9px;letter-spacing:1px}
-.nav{position:fixed;z-index:10;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;padding:10px 7px;padding-bottom:calc(10px + env(safe-area-inset-bottom));background:rgba(8,8,13,.96);border-top:1px solid var(--line);backdrop-filter:blur(12px)}
-.nav button{padding:7px 1px;background:transparent;border:0;border-radius:9px;color:var(--muted);font-size:9px;font-weight:bold}.nav button span{display:block;margin-bottom:4px;font-size:20px}.nav button.active{color:var(--neon2);background:var(--glow)}
-.orbit-wrap{position:relative;width:100%;max-width:360px;height:330px;margin:5px auto 18px;isolation:isolate}
-.orbit-ring{position:absolute;left:50%;top:50%;width:220px;height:220px;transform:translate(-50%,-50%);border:1px dashed var(--line);border-radius:50%;box-shadow:0 0 22px var(--glow),inset 0 0 22px var(--glow);animation:spin 18s linear infinite}
-.orbit-ring:before,.orbit-ring:after{content:"";position:absolute;inset:18px;border:1px solid var(--line);border-radius:50%}.orbit-ring:after{inset:-12px;border-style:dotted}
-.core{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);width:105px;height:105px;display:grid;place-items:center;border:2px solid var(--neon);border-radius:50%;background:radial-gradient(circle,var(--glow),#0b0a11 72%);box-shadow:0 0 28px var(--glow),inset 0 0 20px var(--glow);text-align:center;font-size:12px;font-weight:bold;pointer-events:none}
-.core strong{display:block;color:var(--neon2);font-size:23px}
-.orbit-track{position:absolute;inset:0;animation:orbitSpin 18s linear infinite}
-.orbit-node{position:absolute;left:50%;top:50%;width:82px;height:74px;margin:-37px 0 0 -41px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid var(--line);border-radius:14px;background:rgba(17,15,24,.97);color:var(--neon2);box-shadow:0 0 16px var(--glow);font-size:10px;font-weight:bold;transform:rotate(var(--angle)) translateY(-132px) rotate(calc(-1 * var(--angle)));animation:counterSpin 18s linear infinite;transition:box-shadow .2s,border-color .2s}
-.orbit-node i{font-size:22px;font-style:normal}.orbit-node:active{scale:.95}.orbit-node.selected{border-color:var(--neon2);box-shadow:0 0 25px var(--neon),inset 0 0 15px var(--glow)}
-@keyframes orbitSpin{to{transform:rotate(360deg)}}@keyframes counterSpin{to{rotate:-360deg}}
-.orbit-hint{text-align:center;margin-top:-2px;color:var(--muted);font-size:10px}
-.tool-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tool{min-width:0;min-height:105px;padding:14px 11px;text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 0 10px rgba(0,0,0,.2)}
-.tool:active{transform:scale(.97)}.tool .ico{display:block;margin-bottom:8px;font-size:24px}.tool b{display:block;font-size:11px}.tool small{display:block;margin-top:5px;color:var(--muted);font-size:10px}
-.status{padding:13px;margin-top:13px;border:1px solid var(--line);border-radius:12px;background:var(--glow);font-size:11px;line-height:1.6}.module-card{padding:16px}.module-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
-.back-btn{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--neon2);font-size:10px}
-.status-pill{display:inline-block;padding:6px 9px;border-radius:99px;font-size:10px;font-weight:bold;letter-spacing:.5px}.offline{color:#ff7180;background:rgba(255,36,61,.13);border:1px solid rgba(255,36,61,.4)}.online{color:#71ffb0;background:rgba(42,255,142,.1);border:1px solid rgba(42,255,142,.4)}
-.chatbox{height:350px;display:flex;flex-direction:column;overflow:hidden}.chat-head{padding:13px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.messages{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:10px}.msg{max-width:85%;padding:10px 12px;border:1px solid #39303d;border-radius:12px;background:#1a1820;font-size:12px;line-height:1.5;overflow-wrap:anywhere}.msg.mine{align-self:flex-end;border-color:var(--line);background:var(--glow)}.msg small{display:block;margin-bottom:4px;color:var(--muted);font-size:9px}
-.chat-form{display:flex;gap:7px;padding:9px;border-top:1px solid var(--line)}.chat-form input{flex:1;min-width:0;margin:0}
-.info-card{padding:17px;margin-bottom:12px}.info-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.08);font-size:12px;overflow-wrap:anywhere}.info-row:last-child{border:0}.info-row .ico{font-size:22px}.info-card a{display:block;margin-top:10px;text-decoration:none;text-align:center}
-.footer{margin:25px 0;color:var(--muted);text-align:center;font-size:9px;letter-spacing:1px}
-.toast{position:fixed;z-index:30;left:50%;bottom:95px;transform:translate(-50%,15px);opacity:0;pointer-events:none;width:max-content;max-width:90%;padding:12px 16px;border:1px solid var(--line);border-radius:12px;background:#19141e;box-shadow:0 0 18px var(--glow);font-size:12px;transition:.25s}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(max-width:350px){.orbit-wrap{height:300px}.orbit-node{width:72px;height:66px;margin:-33px 0 0 -36px;font-size:9px}.orbit-node{transform:rotate(var(--angle)) translateY(-116px) rotate(calc(-1 * var(--angle)))}.core{width:90px;height:90px}.topbar .brand{font-size:12px}.mode-btn{padding:8px 6px;font-size:9px}}
-@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
-</style>
-</head>
-<body>
-<section id="loginScreen" class="screen">
-  <div class="login-wrap">
-    <div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>HOLOGRAM ACCESS SYSTEM</small></div>
-    <div class="login-art"><div class="login-orb">✦</div></div>
-    <form id="loginForm" class="card login-form">
-      <div class="section-title" style="margin-top:0">◈ SYSTEM LOGIN</div>
-      <label class="muted" for="username">USERNAME</label><input id="username" class="field" placeholder="Masukkan username" autocomplete="username" maxlength="24" required>
-      <label class="muted" for="password">PASSWORD</label><input id="password" class="field" type="password" placeholder="Masukkan sandi" autocomplete="current-password" required>
-      <button class="btn" type="submit">⟢ MASUK KE PANEL</button>
-      <p class="muted center">Masuk sebagai Member • Isi username dan password pilihanmu</p>
-    </form>
-    <div class="center muted">RED / PURPLE HOLOGRAM INTERFACE</div>
-  </div>
-</section>
-<main id="appScreen" class="screen hidden">
-<header class="topbar"><div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>NEURAL CONTROL PANEL</small></div><button id="modeBtn" class="mode-btn">◉ MODE UNGU</button></header>
-<section id="dashboardPage" class="page">
-  <div class="hero card"><div class="neon" style="font-size:10px;letter-spacing:3px">SYSTEM ONLINE // 01</div><h1>WELCOME TO<br><span class="neon">KING DAFFZZ</span></h1><p class="muted">Interface hologram futuristik. Pilih menu dan jelajahi panel demo.</p>
-  <div class="anime-stage"><div class="stars"></div><div class="anime"><div class="body"></div><div class="face"></div><div class="hair"></div><div class="eye l"></div><div class="eye r"></div></div><div class="scan"></div><div style="position:absolute;left:12px;bottom:10px;font-size:9px;letter-spacing:2px;color:var(--neon2)">ANIME CYBER // LIVE FX</div></div></div>
-  <div class="stat-grid"><div class="stat card"><b>● ONLINE</b><span>STATUS PANEL</span></div><div class="stat card"><b id="clock">--:--</b><span>WAKTU PERANGKAT</span></div><div class="stat card"><b>02</b><span>UI THEMES</span></div><div class="stat card"><b>MEMBER</b><span>SESSION</span></div></div>
-  <div class="section-title">◈ QUICK ACCESS</div><div class="tool-grid"><button class="tool" data-goto="bugPage"><span class="ico">🌀</span><b>BUG PANEL</b><small>Menu hologram interaktif</small></button><button class="tool" data-goto="chatPage"><span class="ico">💬</span><b>PUBLIC CHAT</b><small>Obrolan realtime online</small></button></div>
-</section>
-<section id="bugPage" class="page hidden">
-  <div class="section-title">◈ HOLOGRAM COMMAND CENTER</div>
-  <div class="orbit-wrap"><div class="orbit-ring"></div><div class="core"><div><strong>𓆩✦𓆪</strong>KING<br>DAFFZZ</div></div>
-    <div class="orbit-track">
-      <button class="orbit-node" style="--angle:0deg" data-panel="bugTools"><i>☠</i>BUG</button>
-      <button class="orbit-node" style="--angle:90deg" data-panel="senderTools"><i>➤</i>SENDER</button>
-      <button class="orbit-node" style="--angle:180deg" data-panel="banTools"><i>⬡</i>BAN GROUP</button>
-      <button class="orbit-node" style="--angle:270deg" data-panel="customTools"><i>⌘</i>BUG CUSTOM</button>
-    </div>
-  </div><div class="orbit-hint">✦ IKON BERPUTAR MENGELILINGI LOGO • TEKAN UNTUK MEMBUKA MENU ✦</div>
-  <div class="section-title">◈ SELECT MODULE</div>
-  <div id="bugTools" class="module card module-card">
-    <div class="module-head"><b class="neon">☠ MENU BUG</b><span class="status-pill online">DEMO READY</span></div>
-    <div class="tool-grid">
-      <button class="tool sim" data-name="DELAY HARD"><span class="ico">⏳</span><b>DELAY HARD</b><small>Buka detail simulasi</small></button>
-      <button class="tool sim" data-name="FOR CLOSE"><span class="ico">⛔</span><b>FOR CLOSE</b><small>Buka detail simulasi</small></button>
-      <button class="tool sim" data-name="SPAM OTP"><span class="ico">📨</span><b>SPAM OTP</b><small>Pratinjau aman</small></button>
-      <button class="tool sim" data-name="BULDO CRASH"><span class="ico">💥</span><b>BULDO CRASH</b><small>Pratinjau aman</small></button>
-      <button class="tool sim" data-name="LOCK CHAT"><span class="ico">🔒</span><b>LOCK CHAT</b><small>Pratinjau aman</small></button>
-    </div>
-  </div>
-  <div id="senderTools" class="module hidden card module-card">
-    <div class="module-head"><b class="neon">➤ SENDER DEMO</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div>
-    <p class="muted">Status tautan sender demo disimpan di browser ini. Tidak terhubung ke WhatsApp atau server sungguhan.</p>
-    <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px;border:1px solid var(--line);border-radius:12px">
-      <div><b>STATUS TAUTAN</b><div class="muted" id="senderDetail">Belum ada sender demo yang ditautkan.</div></div><span id="senderBadge" class="status-pill offline">● BELUM DITAUTKAN</span>
-    </div>
-    <label class="muted" for="senderLabel" style="display:block;margin-top:14px">IDENTITAS SENDER DEMO</label><input id="senderLabel" class="field" maxlength="30" placeholder="Contoh: DAFFZZ-DEMO">
-    <button id="linkSenderBtn" class="btn" style="width:100%;margin-top:8px">🔗 TAUTKAN SENDER DEMO</button>
-    <button id="unlinkSenderBtn" class="btn ghost" style="width:100%;margin-top:8px">PUTUSKAN TAUTAN</button>
-    <div class="status">ℹ️ Ini hanya mengubah indikator demo lokal. Tidak mengirim pesan dan tidak menautkan akun sungguhan.</div>
-  </div>
-  <div id="banTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⬡ BAN GROUP</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Pratinjau panel pengelolaan grup. Tidak menjalankan ban atau mengubah grup sungguhan.</p><button class="btn ghost sim" data-name="BAN GROUP DEMO">BUKA SIMULASI</button></div>
-  <div id="customTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⌘ BUG CUSTOM</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Kustomisasi tampilan demo tanpa aksi terhadap aplikasi lain.</p><input class="field" id="customName" placeholder="Nama preset visual" maxlength="40"><button id="customBtn" class="btn" style="width:100%">SIMPAN PRESET DEMO</button><div id="presetList" class="muted" style="margin-top:10px"></div></div>
-  <div class="status">⚠ <b>DEMO MODE:</b> Semua modul hanya simulasi antarmuka. Tidak ada fitur untuk mengirim spam, membuat crash, atau mengganggu akun dan perangkat.</div>
-</section>
-<section id="chatPage" class="page hidden"><div class="section-title">◈ PUBLIC CHAT // ONLINE</div><div class="chatbox card"><div class="chat-head"><div><b>🌐 Public Room</b><div class="muted">Pesan dibagikan ke pengguna online</div></div><span id="chatStatus" class="neon">● MENGHUBUNGKAN</span></div><div id="messages" class="messages"><div class="msg"><small>SYSTEM</small>Menghubungkan ke Public Chat...</div></div><form id="chatForm" class="chat-form"><input id="chatInput" class="field" placeholder="Tulis pesan..." maxlength="1000" autocomplete="off" required><button class="btn" type="submit">➤</button></form></div><p class="muted">Pesan tersimpan sementara di server (maksimal 100 pesan). Riwayat terhapus saat server dimulai ulang.</p></section>
-<section id="infoPage" class="page hidden"><div class="section-title">◈ DEVELOPER INFORMATION</div><div class="info-card card center"><div class="login-orb" style="margin:10px auto 20px;width:88px;height:88px;font-size:32px">✦</div><div class="neon" style="font-weight:900;font-size:16px">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪</div><p class="muted">DEVELOPER BY</p><div style="height:1px;background:var(--line);margin:18px 0"></div><div class="info-row"><span class="ico">📱</span><div><b>WhatsApp Owner</b><br><span class="muted">+62 851-5183-3180</span></div></div><div class="info-row"><span class="ico">✉️</span><div><b>Email</b><br><span class="muted">ubaydillahdaffa7@gmail.com</span></div></div><a class="btn" href="https://wa.me/6285151833180" target="_blank" rel="noopener">HUBUNGI VIA WHATSAPP ↗</a><a class="btn ghost" href="mailto:ubaydillahdaffa7@gmail.com">KIRIM EMAIL ↗</a></div><div class="status">✦ KING DAFFZZ UI • Versi demo 1.2<br>Desain responsif dengan dua tema hologram.</div></section>
-<div class="footer">KING DAFFZZ • HOLOGRAM INTERFACE • DEMO ONLY</div>
-</main>
-<nav id="nav" class="nav hidden"><button class="active" data-page="dashboardPage"><span>⌂</span>DASHBOARD</button><button data-page="bugPage"><span>◉</span>BUG</button><button data-page="chatPage"><span>▤</span>PUBLIC CHAT</button><button data-page="infoPage"><span>ⓘ</span>INFO</button></nav>
-<div id="toast" class="toast"></div>
+
 <script>
 "use strict";
 
@@ -148,35 +17,58 @@ function toast(message) {
   window.toastTimer = setTimeout(() => el.classList.remove("show"), 2400);
 }
 
+let myUsername = sessionStorage.getItem("hollow_username") || "";
+let socket = null;
+const messagesBox = document.getElementById("messages");
+const chatForm = document.getElementById("chatForm");
+const chatInput = document.getElementById("chatInput");
+const chatStatus = document.getElementById("chatStatus");
+const displayedMessageIds = new Set();
+
 function enterPanel(username) {
-  sessionStorage.setItem("hollow_username", username);
+  myUsername = username.trim().slice(0, 24);
+  sessionStorage.setItem("hollow_username", myUsername);
   loginScreen.classList.add("hidden");
   appScreen.classList.remove("hidden");
   nav.classList.remove("hidden");
-  document.querySelector("#dashboardPage .stat:nth-child(4) b").textContent = "MEMBER";
-  toast("Berhasil masuk sebagai Member ✦");
+  connectChat();
+  toast("Berhasil masuk sebagai " + myUsername);
 }
 
 loginForm.addEventListener("submit", function(e) {
   e.preventDefault();
+
   const username = usernameInput.value.trim().slice(0, 24);
   const password = passwordInput.value;
+
   if (!username || !password) {
     toast("Isi username dan password.");
     return;
   }
-  // UI-only sign-in: this does not create a secure server-side account.
+
   enterPanel(username);
   passwordInput.value = "";
 });
 
 function showPage(pageId) {
-  document.querySelectorAll(".page").forEach(p => p.classList.toggle("hidden", p.id !== pageId));
-  document.querySelectorAll(".nav button").forEach(b => b.classList.toggle("active", b.dataset.page === pageId));
+  document.querySelectorAll(".page").forEach(p => {
+    p.classList.toggle("hidden", p.id !== pageId);
+  });
+
+  document.querySelectorAll(".nav button").forEach(b => {
+    b.classList.toggle("active", b.dataset.page === pageId);
+  });
+
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
-nav.querySelectorAll("button").forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
-document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => showPage(b.dataset.goto)));
+
+nav.querySelectorAll("button").forEach(b => {
+  b.addEventListener("click", () => showPage(b.dataset.page));
+});
+
+document.querySelectorAll("[data-goto]").forEach(b => {
+  b.addEventListener("click", () => showPage(b.dataset.goto));
+});
 
 document.getElementById("modeBtn").addEventListener("click", function() {
   document.body.classList.toggle("purple");
@@ -186,21 +78,47 @@ document.getElementById("modeBtn").addEventListener("click", function() {
 });
 
 function selectModule(panelId) {
-  document.querySelectorAll(".module").forEach(m => m.classList.toggle("hidden", m.id !== panelId));
-  document.querySelectorAll(".orbit-node").forEach(b => b.classList.toggle("selected", b.dataset.panel === panelId));
-  const names = { bugTools: "BUG", senderTools: "SENDER", banTools: "BAN GROUP", customTools: "BUG CUSTOM" };
+  document.querySelectorAll(".module").forEach(m => {
+    m.classList.toggle("hidden", m.id !== panelId);
+  });
+
+  document.querySelectorAll(".orbit-node").forEach(b => {
+    b.classList.toggle("selected", b.dataset.panel === panelId);
+  });
+
+  const names = {
+    bugTools: "BUG",
+    senderTools: "SENDER",
+    banTools: "BAN GROUP",
+    customTools: "BUG CUSTOM"
+  };
+
   toast("Menu " + (names[panelId] || "BUG") + " dibuka");
 }
-document.querySelectorAll(".orbit-node").forEach(b => b.addEventListener("click", () => selectModule(b.dataset.panel)));
-document.querySelectorAll(".back-btn").forEach(b => b.addEventListener("click", () => selectModule(b.dataset.panel)));
-document.querySelectorAll(".sim").forEach(b => b.addEventListener("click", () => {
-  toast("SIMULASI: " + (b.dataset.name || "modul") + " — tidak ada aksi nyata.");
-}));
+
+document.querySelectorAll(".orbit-node").forEach(b => {
+  b.addEventListener("click", () => selectModule(b.dataset.panel));
+});
+
+document.querySelectorAll(".back-btn").forEach(b => {
+  b.addEventListener("click", () => selectModule(b.dataset.panel));
+});
+
+document.querySelectorAll(".sim").forEach(b => {
+  b.addEventListener("click", () => {
+    toast("SIMULASI: " + (b.dataset.name || "modul") + " — tidak ada aksi nyata.");
+  });
+});
 
 document.getElementById("customBtn").addEventListener("click", () => {
   const input = document.getElementById("customName");
   const name = input.value.trim();
-  if (!name) { toast("Isi nama preset visual dulu."); return; }
+
+  if (!name) {
+    toast("Isi nama preset visual dulu.");
+    return;
+  }
+
   const item = document.createElement("div");
   item.textContent = "✦ Preset tersimpan: " + name;
   document.getElementById("presetList").appendChild(item);
@@ -209,72 +127,96 @@ document.getElementById("customBtn").addEventListener("click", () => {
 });
 
 let senderLinked = false;
+
 function renderSender() {
   const badge = document.getElementById("senderBadge");
   const detail = document.getElementById("senderDetail");
   const label = document.getElementById("senderLabel");
+
   badge.className = "status-pill " + (senderLinked ? "online" : "offline");
   badge.textContent = senderLinked ? "● SUDAH DITAUTKAN" : "● BELUM DITAUTKAN";
+
   detail.textContent = senderLinked
     ? "Sender demo aktif: " + (label.value.trim() || "DAFFZZ-DEMO")
     : "Belum ada sender demo yang ditautkan.";
+
   document.getElementById("linkSenderBtn").textContent = senderLinked
     ? "✓ SENDER DEMO TERTAUT"
     : "🔗 TAUTKAN SENDER DEMO";
 }
+
 document.getElementById("linkSenderBtn").addEventListener("click", () => {
   senderLinked = true;
+
   if (!document.getElementById("senderLabel").value.trim()) {
     document.getElementById("senderLabel").value = "DAFFZZ-DEMO";
   }
+
   renderSender();
   toast("Sender demo berhasil ditautkan secara lokal ✦");
 });
+
 document.getElementById("unlinkSenderBtn").addEventListener("click", () => {
   senderLinked = false;
   renderSender();
   toast("Tautan sender demo diputuskan");
 });
+
 document.getElementById("senderLabel").addEventListener("input", () => {
   if (senderLinked) renderSender();
 });
 
-// Public Chat: requires the Socket.IO server implementation in server.js.
-const messagesBox = document.getElementById("messages");
-const chatForm = document.getElementById("chatForm");
-const chatInput = document.getElementById("chatInput");
-const chatStatus = document.getElementById("chatStatus");
-let socket = null;
-let myUsername = sessionStorage.getItem("hollow_username") || "Member";
-const displayedMessageIds = new Set();
-
 function renderChatMessage(data) {
   if (!data || !data.id || displayedMessageIds.has(data.id)) return;
+
   displayedMessageIds.add(data.id);
 
   const msg = document.createElement("div");
   msg.className = "msg";
-  if (data.username === myUsername) msg.classList.add("mine");
+
+  if (data.username === myUsername) {
+    msg.classList.add("mine");
+  }
 
   const label = document.createElement("small");
   const time = data.time ? new Date(data.time) : new Date();
-  label.textContent = (data.username || "Member") + " • " +
-    time.toLocaleTimeString("id-ID", { hour: "2-digit", minute: "2-digit" });
+
+  label.textContent =
+    (data.username || "Member") + " • " +
+    time.toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
 
   msg.appendChild(label);
   msg.appendChild(document.createTextNode(String(data.message || "")));
   messagesBox.appendChild(msg);
 
-  while (messagesBox.children.length > 100) messagesBox.removeChild(messagesBox.firstChild);
+  while (messagesBox.children.length > 100) {
+    messagesBox.removeChild(messagesBox.firstChild);
+  }
+
   messagesBox.scrollTop = messagesBox.scrollHeight;
 }
 
-if (typeof window.io === "function") {
+function connectChat() {
+  if (typeof window.io !== "function") {
+    chatStatus.textContent = "● SOCKET.IO TIDAK TERSEDIA";
+    chatStatus.style.color = "#ff7180";
+    return;
+  }
+
+  if (socket) {
+    socket.disconnect();
+  }
+
   socket = window.io();
 
   socket.on("connect", () => {
     chatStatus.textContent = "● ONLINE";
     chatStatus.style.color = "#71ffb0";
+
+    socket.emit("chat:join", myUsername);
   });
 
   socket.on("disconnect", () => {
@@ -290,17 +232,24 @@ if (typeof window.io === "function") {
   socket.on("chat:history", history => {
     messagesBox.replaceChildren();
     displayedMessageIds.clear();
-    if (Array.isArray(history)) history.slice(-100).forEach(renderChatMessage);
+
+    if (Array.isArray(history)) {
+      history.slice(-100).forEach(renderChatMessage);
+    }
   });
 
   socket.on("chat:new", renderChatMessage);
-} else {
-  chatStatus.textContent = "● SERVER BELUM SIAP";
+
+  socket.on("chat:joined", data => {
+    if (data && data.message) toast(data.message);
+  });
 }
 
 chatForm.addEventListener("submit", e => {
   e.preventDefault();
+
   const message = chatInput.value.trim();
+
   if (!message) return;
 
   if (!socket || !socket.connected) {
@@ -308,19 +257,27 @@ chatForm.addEventListener("submit", e => {
     return;
   }
 
-  myUsername = sessionStorage.getItem("hollow_username") || "Member";
-  socket.emit("chat:send", { username: myUsername, message: message.slice(0, 1000) });
+  socket.emit("chat:send", {
+    message: message.slice(0, 1000)
+  });
+
   chatInput.value = "";
 });
 
 function updateClock() {
-  document.getElementById("clock").textContent = new Date().toLocaleTimeString("id-ID", {
-    hour: "2-digit", minute: "2-digit"
-  });
+  document.getElementById("clock").textContent =
+    new Date().toLocaleTimeString("id-ID", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
 }
+
 updateClock();
 setInterval(updateClock, 10000);
 renderSender();
+
+if (myUsername) {
+  usernameInput.value = myUsername;
+  enterPanel(myUsername);
+}
 </script>
-</body>
-</html>
