@@ -17,6 +17,36 @@ body.theme-shift:before{animation:themePulse .65s ease-out}
 .page:not(.hidden){animation:pageEnter .35s ease both}
 @keyframes pageEnter{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
 button:active{filter:brightness(1.18)}
+/* Smooth UI polish: additions only; existing markup and features are preserved. */
+.card,.tool,.stat,.hero,.module-card,.info-card{transition:background-color .42s ease,border-color .42s ease,box-shadow .42s ease,transform .28s cubic-bezier(.2,.8,.2,1)}
+.tool:hover,.card:hover{box-shadow:0 0 24px var(--glow)}
+.nav button,.mode-btn,.btn,.orbit-node{ -webkit-tap-highlight-color:transparent; }
+.nav button:not(.dashboard-nav):active,.mode-btn:active,.btn:active{transform:scale(.97)}
+.dashboard-nav{isolation:isolate;overflow:visible}
+.dashboard-nav:before{content:"";position:absolute;inset:-4px;border-radius:17px;border:1px solid var(--line);opacity:.55;pointer-events:none;animation:dashboardHalo 2.8s ease-in-out infinite}
+@keyframes dashboardHalo{0%,100%{transform:scale(.98);opacity:.25}50%{transform:scale(1.06);opacity:.7}}
+@media(prefers-reduced-motion:reduce){.dashboard-nav:before{animation:none}}
+/* Motion tuning: GPU-friendly movement and reduced visual stutter on mobile */
+.card,.tool,.mode-btn,.btn,.nav button,.orbit-node,.page{will-change:transform,opacity}
+.page:not(.hidden){animation:pageEnter .42s cubic-bezier(.22,.75,.25,1) both}
+@keyframes pageEnter{from{opacity:0;transform:translate3d(0,10px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+.ambient-orbs{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;contain:strict}
+.ambient-orb{position:absolute;width:9px;height:9px;border-radius:50%;background:var(--neon2);opacity:.28;box-shadow:0 0 15px var(--glow);transform:translate3d(0,0,0);animation:orbDrift var(--duration,17s) ease-in-out infinite alternate;animation-delay:var(--delay,0s)}
+.ambient-orb:nth-child(1){left:8%;top:24%;--duration:18s;--dx:38px;--dy:-65px;width:7px;height:7px}
+.ambient-orb:nth-child(2){left:84%;top:20%;--duration:22s;--dx:-45px;--dy:75px;width:11px;height:11px}
+.ambient-orb:nth-child(3){left:24%;top:72%;--duration:20s;--dx:65px;--dy:-42px}
+.ambient-orb:nth-child(4){left:73%;top:68%;--duration:16s;--dx:-55px;--dy:-62px;width:6px;height:6px}
+.ambient-orb:nth-child(5){left:50%;top:43%;--duration:24s;--dx:28px;--dy:85px;width:5px;height:5px}
+.ambient-orb:nth-child(6){left:93%;top:48%;--duration:19s;--dx:-35px;--dy:50px;width:7px;height:7px}
+@keyframes orbDrift{0%{transform:translate3d(0,0,0) scale(.8);opacity:.14}50%{opacity:.42}100%{transform:translate3d(var(--dx,30px),var(--dy,-40px),0) scale(1.25);opacity:.25}}
+.settings-wrap{position:relative;flex-shrink:0}
+.settings-btn{width:39px;height:39px;display:grid;place-items:center;font-size:21px;padding:0;border-radius:12px;transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s ease}
+.settings-btn[aria-expanded="true"]{transform:rotate(75deg);box-shadow:0 0 18px var(--glow)}
+.settings-menu{position:absolute;right:0;top:calc(100% + 9px);z-index:30;width:176px;padding:7px;border:1px solid var(--line);border-radius:14px;background:rgba(13,12,20,.97);box-shadow:0 12px 32px #0008;backdrop-filter:blur(12px);transform-origin:top right;animation:settingsIn .2s cubic-bezier(.2,.8,.2,1) both}
+.settings-menu button{display:flex;width:100%;align-items:center;gap:10px;padding:12px;border:0;border-radius:9px;background:transparent;color:var(--text);text-align:left;font-size:12px;font-weight:700}
+.settings-menu button:active,.settings-menu button:focus-visible{background:var(--glow);outline:none}
+@keyframes settingsIn{from{opacity:0;transform:translate3d(0,-6px,0) scale(.96)}to{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.ambient-orbs{display:none}}
 @keyframes softPulse{0%,100%{box-shadow:0 0 10px var(--glow)}50%{box-shadow:0 0 22px var(--glow)}}
 body.purple{--neon:#b14cff;--neon2:#e0a7ff;--glow:rgba(153,47,255,.34);--line:rgba(184,87,255,.45)}
 button,input{font:inherit}button{cursor:pointer;color:inherit}.hidden{display:none!important}
@@ -53,12 +83,12 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
 .nav button.dashboard-nav.active{background:var(--glow);border-color:var(--neon2);box-shadow:0 0 24px var(--glow),inset 0 0 12px var(--glow);transform:translateY(-2px) scale(1.04)}
 .nav button:not(.dashboard-nav).active{box-shadow:inset 0 0 10px var(--glow)}
 .orbit-wrap{position:relative;width:100%;max-width:360px;height:330px;margin:5px auto 18px;isolation:isolate}
-.orbit-ring{position:absolute;left:50%;top:50%;width:220px;height:220px;transform:translate(-50%,-50%);border:1px dashed var(--line);border-radius:50%;box-shadow:0 0 22px var(--glow),inset 0 0 22px var(--glow);animation:spin 18s linear infinite}
+.orbit-ring{position:absolute;left:50%;top:50%;width:220px;height:220px;transform:translate(-50%,-50%);border:1px dashed var(--line);border-radius:50%;box-shadow:0 0 22px var(--glow),inset 0 0 22px var(--glow);animation:spin 24s linear infinite}
 .orbit-ring:before,.orbit-ring:after{content:"";position:absolute;inset:18px;border:1px solid var(--line);border-radius:50%}.orbit-ring:after{inset:-12px;border-style:dotted}
 .core{position:absolute;z-index:2;left:50%;top:50%;transform:translate(-50%,-50%);width:105px;height:105px;display:grid;place-items:center;border:2px solid var(--neon);border-radius:50%;background:radial-gradient(circle,var(--glow),#0b0a11 72%);box-shadow:0 0 28px var(--glow),inset 0 0 20px var(--glow);text-align:center;font-size:12px;font-weight:bold;pointer-events:none}
 .core strong{display:block;color:var(--neon2);font-size:23px}
-.orbit-track{position:absolute;inset:0;animation:orbitSpin 18s linear infinite}
-.orbit-node{position:absolute;left:50%;top:50%;width:82px;height:74px;margin:-37px 0 0 -41px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid var(--line);border-radius:14px;background:rgba(17,15,24,.97);color:var(--neon2);box-shadow:0 0 16px var(--glow);font-size:10px;font-weight:bold;transform:rotate(var(--angle)) translateY(-132px) rotate(calc(-1 * var(--angle)));animation:counterSpin 18s linear infinite;transition:box-shadow .2s,border-color .2s}
+.orbit-track{position:absolute;inset:0;animation:orbitSpin 26s linear infinite}
+.orbit-node{position:absolute;left:50%;top:50%;width:82px;height:74px;margin:-37px 0 0 -41px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid var(--line);border-radius:14px;background:rgba(17,15,24,.97);color:var(--neon2);box-shadow:0 0 16px var(--glow);font-size:10px;font-weight:bold;transform:rotate(var(--angle)) translateY(-132px) rotate(calc(-1 * var(--angle)));animation:counterSpin 26s linear infinite;transition:box-shadow .32s ease,border-color .32s ease,transform .32s cubic-bezier(.2,.8,.2,1)}
 .orbit-node i{font-size:22px;font-style:normal}.orbit-node:active{scale:.95}.orbit-node.selected{border-color:var(--neon2);box-shadow:0 0 25px var(--neon),inset 0 0 15px var(--glow)}
 @keyframes orbitSpin{to{transform:rotate(360deg)}}@keyframes counterSpin{to{rotate:-360deg}}
 .orbit-hint{text-align:center;margin-top:-2px;color:var(--muted);font-size:10px}
@@ -78,6 +108,7 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
 </style>
 </head>
 <body>
+<div class="ambient-orbs" aria-hidden="true"><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i></div>
 <section id="loginScreen" class="screen">
   <div class="login-wrap">
     <div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>HOLOGRAM ACCESS SYSTEM</small></div>
@@ -94,9 +125,9 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
   </div>
 </section>
 <main id="appScreen" class="screen hidden">
-<header class="topbar"><div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>NEURAL CONTROL PANEL</small></div><div style="display:flex;gap:6px;align-items:center"><button id="logoutBtn" class="mode-btn">KELUAR</button><button id="modeBtn" class="mode-btn">◉ MODE UNGU</button></div></header>
+<header class="topbar"><div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>NEURAL CONTROL PANEL</small></div><div style="display:flex;gap:6px;align-items:center"><button id="logoutBtn" class="mode-btn">KELUAR</button><button id="modeBtn" class="mode-btn">◉ MODE UNGU</button><div class="settings-wrap"><button id="settingsBtn" class="mode-btn settings-btn" type="button" aria-label="Pengaturan" aria-expanded="false" aria-controls="settingsMenu">⚙</button><div id="settingsMenu" class="settings-menu hidden"><button type="button" data-settings-page="presetsPage"><span>▣</span> Preset</button><button type="button" data-settings-page="ownerPage"><span>♛</span> Owner</button></div></div></div></header>
 <section id="dashboardPage" class="page">
-  <div class="hero card"><div class="neon" style="font-size:10px;letter-spacing:3px">SYSTEM ONLINE // 01</div><h1>WELCOME TO<br><span class="neon">KING DAFFZZ</span></h1><p class="muted">Interface hologram futuristik. Pilih menu dan jelajahi panel demo.</p>
+  <div class="hero card"><div class="neon" style="font-size:10px;letter-spacing:3px">SYSTEM ONLINE // 01</div><h1>WELCOME TO<br><span class="neon">KING DAFFZZ</span></h1><p class="muted">Interface hologram futuristik. Pilih menu dan jelajahi panel lokal.</p>
   <div class="anime-stage"><div class="stars"></div><div class="anime"><div class="body"></div><div class="face"></div><div class="hair"></div><div class="eye l"></div><div class="eye r"></div></div><div class="scan"></div><div style="position:absolute;left:12px;bottom:10px;font-size:9px;letter-spacing:2px;color:var(--neon2)">ANIME CYBER // LIVE FX</div></div></div>
   <div class="stat-grid"><div class="stat card"><b>● ONLINE</b><span>STATUS PANEL</span></div><div class="stat card"><b id="clock">--:--</b><span>WAKTU PERANGKAT</span></div><div class="stat card"><b>02</b><span>UI THEMES</span></div><div class="stat card"><b>MEMBER</b><span>SESSION</span></div></div>
   <div class="section-title">◈ QUICK ACCESS</div><div class="tool-grid"><button class="tool" data-goto="bugPage"><span class="ico">🌀</span><b>BUG PANEL</b><small>Menu hologram interaktif</small></button><button class="tool" data-goto="chatPage"><span class="ico">💬</span><b>PUBLIC CHAT</b><small>Obrolan realtime online</small></button></div>
@@ -113,7 +144,7 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
   </div><div class="orbit-hint">✦ IKON BERPUTAR MENGELILINGI LOGO • TEKAN UNTUK MEMBUKA MENU ✦</div>
   <div class="section-title">◈ SELECT MODULE</div>
   <div id="bugTools" class="module card module-card">
-    <div class="module-head"><b class="neon">☠ MENU BUG</b><span class="status-pill online">DEMO READY</span></div>
+    <div class="module-head"><b class="neon">☠ MENU BUG</b><span class="status-pill online">lokal READY</span></div>
     <div class="tool-grid">
       <button class="tool sim" data-name="DELAY HARD"><span class="ico">⏳</span><b>DELAY HARD</b><small>Buka detail simulasi</small></button>
       <button class="tool sim" data-name="FOR CLOSE"><span class="ico">⛔</span><b>FOR CLOSE</b><small>Buka detail simulasi</small></button>
@@ -123,28 +154,28 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
     </div>
   </div>
   <div id="senderTools" class="module hidden card module-card">
-    <div class="module-head"><b class="neon">➤ SENDER DEMO</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div>
-    <p class="muted">Status tautan sender demo disimpan di browser ini. Tidak terhubung ke WhatsApp atau server sungguhan.</p>
+    <div class="module-head"><b class="neon">➤ SENDER lokal</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div>
+    <p class="muted">Status tautan sender lokal disimpan di browser ini. Tidak terhubung ke WhatsApp atau server sungguhan.</p>
     <div style="display:flex;align-items:center;justify-content:space-between;gap:8px;padding:13px;border:1px solid var(--line);border-radius:12px">
-      <div><b>STATUS TAUTAN</b><div class="muted" id="senderDetail">Belum ada sender demo yang ditautkan.</div></div><span id="senderBadge" class="status-pill offline">● BELUM DITAUTKAN</span>
+      <div><b>STATUS TAUTAN</b><div class="muted" id="senderDetail">Belum ada sender lokal yang ditautkan.</div></div><span id="senderBadge" class="status-pill offline">● BELUM DITAUTKAN</span>
     </div>
-    <label class="muted" for="senderLabel" style="display:block;margin-top:14px">IDENTITAS SENDER DEMO</label><input id="senderLabel" class="field" maxlength="30" placeholder="Contoh: DAFFZZ-DEMO">
-    <button id="linkSenderBtn" class="btn" style="width:100%;margin-top:8px">🔗 TAUTKAN SENDER DEMO</button>
+    <label class="muted" for="senderLabel" style="display:block;margin-top:14px">IDENTITAS SENDER lokal</label><input id="senderLabel" class="field" maxlength="30" placeholder="Contoh: DAFFZZ-lokal">
+    <button id="linkSenderBtn" class="btn" style="width:100%;margin-top:8px">🔗 TAUTKAN SENDER lokal</button>
     <button id="unlinkSenderBtn" class="btn ghost" style="width:100%;margin-top:8px">PUTUSKAN TAUTAN</button>
-    <div class="status">ℹ️ Ini hanya mengubah indikator demo lokal. Tidak mengirim pesan dan tidak menautkan akun sungguhan.</div>
+    <div class="status">ℹ️ Ini hanya mengubah indikator lokal lokal. Tidak mengirim pesan dan tidak menautkan akun sungguhan.</div>
   </div>
-  <div id="banTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⬡ BAN GROUP</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Pratinjau panel pengelolaan grup. Tidak menjalankan ban atau mengubah grup sungguhan.</p><button class="btn ghost sim" data-name="BAN GROUP DEMO">BUKA SIMULASI</button></div>
-  <div id="customTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⌘ BUG CUSTOM</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Kustomisasi tampilan demo tanpa aksi terhadap aplikasi lain.</p><input class="field" id="customName" placeholder="Nama preset visual" maxlength="40"><button id="customBtn" class="btn" style="width:100%">SIMPAN PRESET DEMO</button><div id="presetList" class="muted" style="margin-top:10px"></div></div>
-  <div class="status">⚠ <b>DEMO MODE:</b> Semua modul hanya simulasi antarmuka. Tidak ada fitur untuk mengirim spam, membuat crash, atau mengganggu akun dan perangkat.</div>
+  <div id="banTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⬡ BAN GROUP</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Pratinjau panel pengelolaan grup. Tidak menjalankan ban atau mengubah grup sungguhan.</p><button class="btn ghost sim" data-name="BAN GROUP lokal">BUKA SIMULASI</button></div>
+  <div id="customTools" class="module hidden card module-card"><div class="module-head"><b class="neon">⌘ BUG CUSTOM</b><button class="back-btn" data-panel="bugTools">← MENU BUG</button></div><p class="muted">Kustomisasi tampilan lokal tanpa aksi terhadap aplikasi lain.</p><input class="field" id="customName" placeholder="Nama preset visual" maxlength="40"><button id="customBtn" class="btn" style="width:100%">SIMPAN PRESET lokal</button><div id="presetList" class="muted" style="margin-top:10px"></div></div>
+  <div class="status">⚠ <b>lokal MODE:</b> Semua modul hanya simulasi antarmuka. Tidak ada fitur untuk mengirim spam, membuat crash, atau mengganggu akun dan perangkat.</div>
 </section>
 <section id="chatPage" class="page hidden"><div class="section-title">◈ PUBLIC CHAT // ONLINE</div><div class="chatbox card"><div class="chat-head"><div><b>🌐 Public Room</b><div class="muted">Pesan dibagikan ke pengguna online</div></div><span id="chatStatus" class="neon">● MENGHUBUNGKAN</span></div><div id="messages" class="messages"><div class="msg"><small>SYSTEM</small>Menghubungkan ke Public Chat...</div></div><form id="chatForm" class="chat-form"><input id="chatInput" class="field" placeholder="Tulis pesan..." maxlength="1000" autocomplete="off" required><button class="btn" type="submit">➤</button></form><div style="display:flex;gap:7px;padding:9px;border-top:1px solid var(--line);flex-wrap:wrap"><input id="chatFile" class="field" type="file" style="flex:1;min-width:150px;margin:0"><button id="sendChatFile" class="btn ghost" type="button">KIRIM FILE</button></div></div><p class="muted">Riwayat chat tersimpan di server dan dapat tetap ada setelah server restart jika penyimpanan hosting persisten aktif.</p></section>
 <section id="presetsPage" class="page hidden"><div class="section-title">◈ PRESET LIBRARY</div><div class="card module-card"><p class="muted">Pilih file yang sudah diunggah owner. Hanya file yang diizinkan owner yang tersedia untuk dikirim.</p><div id="presetCards" class="tool-grid"><div class="muted">Memuat preset...</div></div></div></section>
 <section id="ownerPage" class="page hidden"><div class="section-title">◈ OWNER CONTROL CENTER</div><div class="card module-card"><p class="muted">Login owner terpisah dari akun member. Jangan bagikan password atau token owner.</p><label class="muted" for="ownerPassword">PASSWORD OWNER</label><input id="ownerPassword" class="field" type="password" autocomplete="current-password" placeholder="Password owner"><button id="ownerLogin" class="btn" style="width:100%">LOGIN OWNER</button><button id="ownerLogout" class="btn ghost hidden" style="width:100%;margin-top:8px">LOGOUT OWNER</button><div id="ownerStatus" class="status">Owner belum login.</div><div id="ownerUploadArea" class="hidden"><label class="muted" for="presetName">NAMA PRESET</label><select id="presetName" class="field"><option>DELAY HARD</option><option>FOR CLOSE</option><option>SPAM OTP</option><option>CRASH C1</option><option>LOCK CHAT</option></select><label class="muted" for="presetFile">FILE PRESET</label><input id="presetFile" class="field" type="file"><button id="presetUpload" class="btn" style="width:100%">UNGGAH / GANTI PRESET</button></div></div></section>
 <section id="whatsappPage" class="page hidden"><div class="section-title">◈ WHATSAPP PAIRING</div><div class="card module-card"><p class="muted">Tautkan hanya akun WhatsApp milikmu atau akun yang pemiliknya memberi izin. Jangan bagikan kode pairing.</p><label class="muted" for="waPhone">NOMOR WHATSAPP (KODE NEGARA)</label><input id="waPhone" class="field" inputmode="tel" placeholder="6281234567890"><div class="tool-grid"><button id="waPair" class="btn">MULAI PAIRING</button><button id="waRefresh" class="btn ghost">CEK STATUS</button><button id="waDisconnect" class="btn ghost">DISCONNECT</button></div><div id="waStatus" class="status">Belum ada sesi.</div><div id="pairingCode" class="status neon hidden" style="font-size:22px;text-align:center;letter-spacing:3px"></div><div class="section-title">◈ KIRIM FILE PRESET</div><label class="muted" for="waDestination">NOMOR TUJUAN</label><input id="waDestination" class="field" inputmode="tel" placeholder="628xxxxxxxxxx"><label class="muted" for="waPreset">PILIH PRESET OWNER</label><select id="waPreset" class="field"><option value="">Memuat preset...</option></select><button id="waSendFile" class="btn" style="width:100%">KIRIM SATU FILE</button><p class="muted">Tidak ada pengiriman massal. Pastikan penerima mengharapkan file tersebut.</p></div></section>
-<section id="infoPage" class="page hidden"><div class="section-title">◈ DEVELOPER INFORMATION</div><div class="info-card card center"><div class="login-orb" style="margin:10px auto 20px;width:88px;height:88px;font-size:32px">✦</div><div class="neon" style="font-weight:900;font-size:16px">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪</div><p class="muted">DEVELOPER BY</p><div style="height:1px;background:var(--line);margin:18px 0"></div><div class="info-row"><span class="ico">📱</span><div><b>WhatsApp Owner</b><br><span class="muted">+62 851-5183-3180</span></div></div><div class="info-row"><span class="ico">✉️</span><div><b>Email</b><br><span class="muted">ubaydillahdaffa7@gmail.com</span></div></div><a class="btn" href="https://wa.me/6285151833180" target="_blank" rel="noopener">HUBUNGI VIA WHATSAPP ↗</a><a class="btn ghost" href="mailto:ubaydillahdaffa7@gmail.com">KIRIM EMAIL ↗</a></div><div class="status">✦ KING DAFFZZ UI • Versi demo 1.2<br>Desain responsif dengan dua tema hologram.</div></section>
-<div class="footer">KING DAFFZZ • HOLOGRAM INTERFACE • DEMO ONLY</div>
+<section id="infoPage" class="page hidden"><div class="section-title">◈ DEVELOPER INFORMATION</div><div class="info-card card center"><div class="login-orb" style="margin:10px auto 20px;width:88px;height:88px;font-size:32px">✦</div><div class="neon" style="font-weight:900;font-size:16px">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪</div><p class="muted">DEVELOPER BY</p><div style="height:1px;background:var(--line);margin:18px 0"></div><div class="info-row"><span class="ico">📱</span><div><b>WhatsApp Owner</b><br><span class="muted">+62 851-5183-3180</span></div></div><div class="info-row"><span class="ico">✉️</span><div><b>Email</b><br><span class="muted">ubaydillahdaffa7@gmail.com</span></div></div><a class="btn" href="https://wa.me/6285151833180" target="_blank" rel="noopener">HUBUNGI VIA WHATSAPP ↗</a><a class="btn ghost" href="mailto:ubaydillahdaffa7@gmail.com">KIRIM EMAIL ↗</a></div><div class="status">✦ KING DAFFZZ UI • Versi lokal 1.2<br>Desain responsif dengan dua tema hologram.</div></section>
+<div class="footer">KING DAFFZZ • HOLOGRAM INTERFACE • lokal ONLY</div>
 </main>
-<nav id="nav" class="nav hidden"><button data-page="bugPage"><span>◉</span>BUG</button><button data-page="chatPage"><span>▤</span>CHAT</button><button data-page="presetsPage"><span>▣</span>PRESET</button><button class="active dashboard-nav" data-page="dashboardPage"><span>⌂</span>DASHBOARD</button><button data-page="whatsappPage"><span>➤</span>WHATSAPP</button><button data-page="ownerPage"><span>♛</span>OWNER</button><button data-page="infoPage"><span>ⓘ</span>INFO</button></nav>
+<nav id="nav" class="nav hidden"><button data-page="bugPage"><span>◉</span>BUG</button><button data-page="chatPage"><span>▤</span>CHAT</button><button class="active dashboard-nav" data-page="dashboardPage"><span>⌂</span>DASHBOARD</button><button data-page="whatsappPage"><span>➤</span>WHATSAPP</button><button data-page="infoPage"><span>ⓘ</span>INFO</button></nav>
 <div id="toast" class="toast"></div>
 <script>
 "use strict";
@@ -212,6 +243,24 @@ function showPage(pageId) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 nav.querySelectorAll("button").forEach(b => b.addEventListener("click", () => showPage(b.dataset.page)));
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsMenu = document.getElementById("settingsMenu");
+settingsBtn.addEventListener("click", (event) => {
+  event.stopPropagation();
+  const open = settingsMenu.classList.toggle("hidden") === false;
+  settingsBtn.setAttribute("aria-expanded", String(open));
+});
+settingsMenu.querySelectorAll("[data-settings-page]").forEach(button => button.addEventListener("click", () => {
+  showPage(button.dataset.settingsPage);
+  settingsMenu.classList.add("hidden");
+  settingsBtn.setAttribute("aria-expanded", "false");
+}));
+document.addEventListener("click", event => {
+  if (!event.target.closest(".settings-wrap")) {
+    settingsMenu.classList.add("hidden");
+    settingsBtn.setAttribute("aria-expanded", "false");
+  }
+});
 document.querySelectorAll("[data-goto]").forEach(b => b.addEventListener("click", () => showPage(b.dataset.goto)));
 
 document.getElementById("modeBtn").addEventListener("click", function() {
@@ -257,24 +306,24 @@ function renderSender() {
   badge.className = "status-pill " + (senderLinked ? "online" : "offline");
   badge.textContent = senderLinked ? "● SUDAH DITAUTKAN" : "● BELUM DITAUTKAN";
   detail.textContent = senderLinked
-    ? "Sender demo aktif: " + (label.value.trim() || "DAFFZZ-DEMO")
-    : "Belum ada sender demo yang ditautkan.";
+    ? "Sender lokal aktif: " + (label.value.trim() || "DAFFZZ-lokal")
+    : "Belum ada sender lokal yang ditautkan.";
   document.getElementById("linkSenderBtn").textContent = senderLinked
-    ? "✓ SENDER DEMO TERTAUT"
-    : "🔗 TAUTKAN SENDER DEMO";
+    ? "✓ SENDER lokal TERTAUT"
+    : "🔗 TAUTKAN SENDER lokal";
 }
 document.getElementById("linkSenderBtn").addEventListener("click", () => {
   senderLinked = true;
   if (!document.getElementById("senderLabel").value.trim()) {
-    document.getElementById("senderLabel").value = "DAFFZZ-DEMO";
+    document.getElementById("senderLabel").value = "DAFFZZ-lokal";
   }
   renderSender();
-  toast("Sender demo berhasil ditautkan secara lokal ✦");
+  toast("Sender lokal berhasil ditautkan secara lokal ✦");
 });
 document.getElementById("unlinkSenderBtn").addEventListener("click", () => {
   senderLinked = false;
   renderSender();
-  toast("Tautan sender demo diputuskan");
+  toast("Tautan sender lokal diputuskan");
 });
 document.getElementById("senderLabel").addEventListener("input", () => {
   if (senderLinked) renderSender();
