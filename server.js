@@ -14,10 +14,13 @@ const pino = require('pino');
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server, { maxHttpBufferSize: 6 * 1024 * 1024 });
+const io = new Server(server, {
+  maxHttpBufferSize: 6 * 1024 * 1024
+});
 
 const PORT = Number(process.env.PORT || 3000);
 const OWNER_PASSWORD = process.env.OWNER_PASSWORD || '';
+
 const DATA_DIR = path.resolve(
   process.env.DATA_DIR || path.join(__dirname, 'data')
 );
@@ -654,8 +657,55 @@ function validClientId(value) {
   return /^[a-f0-9-]{16,100}$/i.test(String(value || ''));
 }
 
+/*
+ * Perbaikan import Baileys:
+ * Bentuk ekspor dapat berbeda bergantung pada versi dan cara modul
+ * dimuat. Periksa beberapa bentuk ekspor sebelum membuat socket.
+ */
+async function startBaileys() {
+  const mod = await import('@whiskeysockets/baileys');
+
+  const candidates = [
+    mod.default,
+    mod.default?.default,
+    mod.makeWASocket,
+    mod.default?.makeWASocket
+  ];
+
+  const makeWASocket = candidates.find(
+    candidate => typeof candidate === 'function'
+  );
+
+  const useMultiFileAuthState =
+    mod.useMultiFileAuthState ||
+    mod.default?.useMultiFileAuthState;
+
+  if (typeof makeWASocket !== 'function') {
+    throw new Error(
+      'Ekspor makeWASocket tidak ditemukan. Ekspor tersedia: ' +
+      Object.keys(mod).join(', ')
+    );
+  }
+
+  if (typeof useMultiFileAuthState !== 'function') {
+    throw new Error(
+      'Ekspor useMultiFileAuthState tidak ditemukan. Ekspor tersedia: ' +
+      Object.keys(mod).join(', ')
+    );
+  }
+
+  return {
+    makeWASocket,
+    useMultiFileAuthState
+  };
+}
+
 function getSession(req) {
-  const id = String(req.query.clientId || req.body?.clientId || '');
+  const id = String(
+    req.query.clientId ||
+    req.body?.clientId ||
+    ''
+  );
 
   const token = String(
     req.get('x-wa-token') ||
@@ -671,10 +721,6 @@ function getSession(req) {
   }
 
   return session;
-}
-
-async function startBaileys() {
-  return import('@whiskeysockets/baileys');
 }
 
 app.post('/api/whatsapp/pair', async (req, res) => {
@@ -738,15 +784,13 @@ app.post('/api/whatsapp/pair', async (req, res) => {
   let sock = null;
 
   try {
-    const baileys = await startBaileys();
-    const makeWASocket = baileys.default;
-
-    if (typeof makeWASocket !== 'function') {
-      throw new Error('Ekspor default Baileys bukan fungsi.');
-    }
+    const {
+      makeWASocket,
+      useMultiFileAuthState
+    } = await startBaileys();
 
     const { state, saveCreds } =
-      await baileys.useMultiFileAuthState(session.authDir);
+      await useMultiFileAuthState(session.authDir);
 
     sock = makeWASocket({
       auth: state,
@@ -795,10 +839,9 @@ app.post('/api/whatsapp/pair', async (req, res) => {
       }
     });
 
-    // Beri waktu socket mulai membuka koneksi sebelum meminta kode.
+    // Tunggu socket mulai membuka koneksi.
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    // Hindari meminta kode bila socket sudah berubah atau terhubung.
     if (session.sock !== sock || session.status === 'connected') {
       session.requesting = false;
       return;
@@ -815,7 +858,6 @@ app.post('/api/whatsapp/pair', async (req, res) => {
       try {
         const code = await sock.requestPairingCode(phoneNumber);
 
-        // Jangan menimpa status jika socket sudah terputus.
         if (session.sock !== sock) {
           session.requesting = false;
           return;
@@ -834,9 +876,10 @@ app.post('/api/whatsapp/pair', async (req, res) => {
       } catch (e) {
         session.status = 'error';
         session.error =
-          'Kode pairing gagal dibuat. Coba mulai sesi baru.';
+          'Kode pairing gagal dibuat. Periksa nomor dan log server.';
 
         session.requesting = false;
+        session.pairingRequested = false;
 
         console.error(
           `[WhatsApp] Client ${clientId}: pairing-code error`,
@@ -844,14 +887,13 @@ app.post('/api/whatsapp/pair', async (req, res) => {
         );
       }
     } else {
-      // Sesi yang sudah terdaftar menunggu koneksi terbuka.
       session.status = 'starting';
       session.requesting = false;
     }
   } catch (e) {
     session.status = 'error';
     session.error =
-      'WhatsApp gagal dimulai. Periksa versi Node.js dan konfigurasi hosting.';
+      'WhatsApp gagal dimulai. Periksa versi Baileys, Node.js, dan log hosting.';
 
     session.requesting = false;
 
