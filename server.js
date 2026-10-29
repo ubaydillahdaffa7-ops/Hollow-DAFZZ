@@ -657,11 +657,6 @@ function validClientId(value) {
   return /^[a-f0-9-]{16,100}$/i.test(String(value || ''));
 }
 
-/*
- * Perbaikan import Baileys:
- * Bentuk ekspor dapat berbeda bergantung pada versi dan cara modul
- * dimuat. Periksa beberapa bentuk ekspor sebelum membuat socket.
- */
 async function startBaileys() {
   const mod = await import('@whiskeysockets/baileys');
 
@@ -680,6 +675,10 @@ async function startBaileys() {
     mod.useMultiFileAuthState ||
     mod.default?.useMultiFileAuthState;
 
+  const fetchLatestBaileysVersion =
+    mod.fetchLatestBaileysVersion ||
+    mod.default?.fetchLatestBaileysVersion;
+
   if (typeof makeWASocket !== 'function') {
     throw new Error(
       'Ekspor makeWASocket tidak ditemukan. Ekspor tersedia: ' +
@@ -696,7 +695,8 @@ async function startBaileys() {
 
   return {
     makeWASocket,
-    useMultiFileAuthState
+    useMultiFileAuthState,
+    fetchLatestBaileysVersion
   };
 }
 
@@ -786,20 +786,47 @@ app.post('/api/whatsapp/pair', async (req, res) => {
   try {
     const {
       makeWASocket,
-      useMultiFileAuthState
+      useMultiFileAuthState,
+      fetchLatestBaileysVersion
     } = await startBaileys();
 
     const { state, saveCreds } =
       await useMultiFileAuthState(session.authDir);
 
-    sock = makeWASocket({
+    let version;
+
+    if (typeof fetchLatestBaileysVersion === 'function') {
+      try {
+        const result = await fetchLatestBaileysVersion();
+
+        if (Array.isArray(result?.version)) {
+          version = result.version;
+          console.log(
+            '[WhatsApp] Baileys protocol version:',
+            version.join('.')
+          );
+        }
+      } catch (e) {
+        console.error(
+          '[WhatsApp] Gagal mengambil versi terbaru; memakai versi bawaan Baileys:',
+          e?.message || e
+        );
+      }
+    }
+
+    const socketOptions = {
       auth: state,
       logger: pino({ level: 'silent' }),
       browser: ['HOLLOW PANEL', 'Chrome', '1.0.0'],
       printQRInTerminal: false,
       markOnlineOnConnect: false
-    });
+    };
 
+    if (version) {
+      socketOptions.version = version;
+    }
+
+    sock = makeWASocket(socketOptions);
     session.sock = sock;
 
     sock.ev.on('creds.update', saveCreds);
@@ -839,7 +866,6 @@ app.post('/api/whatsapp/pair', async (req, res) => {
       }
     });
 
-    // Tunggu socket mulai membuka koneksi.
     await new Promise(resolve => setTimeout(resolve, 1500));
 
     if (session.sock !== sock || session.status === 'connected') {
