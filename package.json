@@ -1,12 +1,15 @@
 {
-  "name": "king-daffzz-hollow-panel",
+  "name": "king-daffzz",
   "version": "2.0.0",
   "private": true,
-  "description": "KING DAFFZZ Hologram Panel with account login, persistent public chat, owner-managed presets, and consent-based WhatsApp file sending",
+  "description": "KING DAFFZZ Hologram Panel",
   "main": "server.js",
-  "type": "commonjs",
-  "scripts": { "start": "node server.js" },
-  "engines": { "node": ">=20.0.0" },
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.18",
     "dotenv": "^16.4.7",
