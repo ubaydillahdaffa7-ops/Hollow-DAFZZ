@@ -138,14 +138,14 @@ function decodeHeader(value, fallback) {
 
 function cleanFilename(value) {
   const base = path.basename(String(value || 'file.bin'))
-    .replace(/[\\r\\n"\\\\/]/g, '_')
+    .replace(/[\r\n"\\/]/g, '_')
     .trim();
   return (base || 'file.bin').slice(0, 120);
 }
 
 function extension(name) {
   const ext = path.extname(name).toLowerCase();
-  return /^\\.[a-z0-9]{1,10}$/.test(ext) ? ext : '.bin';
+  return /^\.[a-z0-9]{1,10}$/.test(ext) ? ext : '.bin';
 }
 
 function safeEqual(a, b) {
@@ -364,7 +364,7 @@ const users = new Map();
 
 function safeName(value) {
   return String(value || 'Pengunjung')
-    .replace(/[<>\\r\\n]/g, '')
+    .replace(/[<>\r\n]/g, '')
     .trim()
     .slice(0, 24) || 'Pengunjung';
 }
@@ -476,7 +476,7 @@ app.get('/api/chat/files/:file', (req, res) => {
 const waSessions = new Map();
 
 function normalizePhone(value) {
-  return String(value || '').replace(/\\D/g, '');
+  return String(value || '').replace(/\D/g, '');
 }
 
 function validClientId(value) {
@@ -494,6 +494,33 @@ function getSession(req) {
 
 async function startBaileys() {
   return import('@whiskeysockets/baileys');
+}
+
+function resolveBaileys(imported) {
+  const nested = imported && imported.default && typeof imported.default === 'object'
+    ? imported.default
+    : null;
+
+  const makeWASocket =
+    (typeof imported?.default === 'function' && imported.default) ||
+    (typeof imported?.makeWASocket === 'function' && imported.makeWASocket) ||
+    (typeof nested?.default === 'function' && nested.default) ||
+    (typeof nested?.makeWASocket === 'function' && nested.makeWASocket) ||
+    null;
+
+  const useMultiFileAuthState =
+    imported?.useMultiFileAuthState ||
+    nested?.useMultiFileAuthState ||
+    null;
+
+  if (typeof makeWASocket !== 'function') {
+    throw new TypeError('Baileys tidak mengekspor fungsi makeWASocket yang valid.');
+  }
+  if (typeof useMultiFileAuthState !== 'function') {
+    throw new TypeError('Baileys tidak mengekspor useMultiFileAuthState yang valid.');
+  }
+
+  return { makeWASocket, useMultiFileAuthState };
 }
 
 app.post('/api/whatsapp/pair', async (req, res) => {
@@ -550,9 +577,9 @@ app.post('/api/whatsapp/pair', async (req, res) => {
   session.requesting = true;
 
   try {
-    const baileys = await startBaileys();
-    const makeWASocket = baileys.default;
-    const { state, saveCreds } = await baileys.useMultiFileAuthState(session.authDir);
+    const imported = await startBaileys();
+    const { makeWASocket, useMultiFileAuthState } = resolveBaileys(imported);
+    const { state, saveCreds } = await useMultiFileAuthState(session.authDir);
 
     const sock = makeWASocket({
       auth: state,
