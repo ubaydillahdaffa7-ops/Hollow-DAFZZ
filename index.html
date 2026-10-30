@@ -106,64 +106,9 @@ body.purple .btn{background:linear-gradient(100deg,#9a32ef,#4c1b82)}.btn.ghost{b
 @media(max-width:350px){.orbit-wrap{height:300px}.orbit-node{width:72px;height:66px;margin:-33px 0 0 -36px;font-size:9px}.orbit-node{transform:rotate(var(--angle)) translateY(-116px) rotate(calc(-1 * var(--angle)))}.core{width:90px;height:90px}.topbar .brand{font-size:12px}.mode-btn{padding:8px 6px;font-size:9px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
 </style>
-<!-- EFEK TAMBAHAN KING DAFFZZ - BOLA GERAK + TEBASAN - INI BIKIN JADI 380+ LINE -->
-<style>
-  /* BOLA DI LOGIN DAN INFO BISA GERAK DI TEMPAT LEBIH HIDUP */
-  .login-orb{
-    animation: float 2.5s ease-in-out infinite, pulseGlow 1.8s ease-in-out infinite, orbDrift 4s ease-in-out infinite !important;
-  }
-  @keyframes pulseGlow{
-    0%,100%{ box-shadow:0 0 28px var(--glow), inset 0 0 25px var(--glow); transform:scale(1); }
-    50%{ box-shadow:0 0 45px var(--glow), 0 0 70px var(--neon), inset 0 0 30px var(--glow); transform:scale(1.08); }
-  }
-  @keyframes orbDrift{
-    0%,100%{ translate:0 0; rotate:0deg; }
-    25%{ translate:4px -6px; rotate:2deg; }
-    50%{ translate:-2px -2px; rotate:-1deg; }
-    75%{ translate:-4px 4px; rotate:-2deg; }
-  }
-  /* EFEK TEBASAN PEDANG - NGIKUT WARNA MODE MERAH/UNGU OTOMATIS */
-  #slashFx{
-    position:fixed;
-    inset:0;
-    z-index:9999;
-    pointer-events:none;
-    opacity:0;
-  }
-  #slashFx .line{
-    position:absolute;
-    top:50%;
-    left:-150%;
-    width:300%;
-    height:7px;
-    background: linear-gradient(90deg, transparent, #fff, var(--neon2), var(--neon), #fff, transparent);
-    box-shadow:0 0 20px var(--neon), 0 0 45px var(--neon), 0 0 70px var(--glow);
-    transform: translateY(-50%) rotate(-18deg);
-  }
-  #slashFx.active{ animation: slashFlash 0.75s ease-out forwards; }
-  #slashFx.active .line{ animation: slashMove 0.68s cubic-bezier(.2,.8,.2,1) forwards; }
-  @keyframes slashMove{
-    0%{ left:-150%; opacity:0; }
-    20%{ opacity:1; }
-    100%{ left:100%; opacity:0; }
-  }
-  @keyframes slashFlash{
-    0%{ opacity:0; background:transparent; }
-    15%{ opacity:1; background:rgba(255,255,255,0.18); }
-    100%{ opacity:0; background:transparent; }
-  }
-  /* TAMBAHAN BIAR LINE COUNT NAIK JADI 380+ - GAK NGARUH FITUR */
-  /* KING DAFFZZ HOLOGRAM FX EXTENDED */
-  .fx-dummy-1{ display:none; }
-  .fx-dummy-2{ display:none; }
-  .fx-dummy-3{ display:none; }
-</style>
 </head>
 <body>
 <div class="ambient-orbs" aria-hidden="true"><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i><i class="ambient-orb"></i></div>
-<!-- EFEK TEBASAN - TAMBAHAN BARU -->
-<div id="slashFx"><div class="line"></div></div>
-
 <section id="loginScreen" class="screen">
   <div class="login-wrap">
     <div class="brand">𓆩 ᖽᐸɪղᘜ ༒ ᙃᴀ̷𝖿ᴢᴢ 𓆪<small>HOLOGRAM ACCESS SYSTEM</small></div>
@@ -254,29 +199,14 @@ let authMode = 'login';
 let authToken = sessionStorage.getItem('hollowAuthToken') || '';
 let currentUser = sessionStorage.getItem('hollow_username') || '';
 let socket = null;
-
-// === TAMBAHAN EFEK TEBASAN - INI YANG BIKIN LINE JADI 380+ ===
-function triggerSlash(){
-  const fx = document.getElementById('slashFx');
-  if(!fx) return;
-  fx.classList.remove('active');
-  void fx.offsetWidth;
-  fx.classList.add('active');
-  setTimeout(()=> fx.classList.remove('active'), 850);
-}
-
 function enterPanel(username) {
   currentUser = username; sessionStorage.setItem('hollow_username', username);
-  triggerSlash(); // TEBASAN PAS LOGIN/DAFTAR BERHASIL - NGIKUT WARNA MERAH/UNGU
-  setTimeout(()=>{
-    loginScreen.classList.add('hidden'); appScreen.classList.remove('hidden'); nav.classList.remove('hidden');
-    const stat = document.querySelector('#dashboardPage .stat:nth-child(4) b'); if (stat) stat.textContent = username.toUpperCase();
-    if (!socket && typeof window.io === 'function') connectChat();
-    toast('Berhasil masuk sebagai ' + username + ' ✦');
-    loadPresets(); refreshWaStatus();
-  }, 420);
+  loginScreen.classList.add('hidden'); appScreen.classList.remove('hidden'); nav.classList.remove('hidden');
+  const stat = document.querySelector('#dashboardPage .stat:nth-child(4) b'); if (stat) stat.textContent = username.toUpperCase();
+  if (!socket && typeof window.io === 'function') connectChat();
+  toast('Berhasil masuk sebagai ' + username + ' ✦');
+  loadPresets(); refreshWaStatus();
 }
-
 function showAuthMode() {
   authMode = authMode === 'login' ? 'register' : 'login';
   document.getElementById('authSubmit').textContent = authMode === 'login' ? '⟢ MASUK KE PANEL' : '✦ BUAT AKUN';
@@ -337,6 +267,7 @@ document.getElementById("modeBtn").addEventListener("click", function() {
   document.body.classList.toggle("purple");
   const purple = document.body.classList.contains("purple");
   document.body.classList.remove("theme-shift");
+  /* Restart the short theme flash so its glow follows the newly selected palette. */
   void document.body.offsetWidth;
   document.body.classList.add("theme-shift");
   window.setTimeout(() => document.body.classList.remove("theme-shift"), 700);
@@ -398,6 +329,7 @@ document.getElementById("senderLabel").addEventListener("input", () => {
   if (senderLinked) renderSender();
 });
 
+// Authenticated realtime chat. The server is the source of identity and history.
 const messagesBox = document.getElementById('messages');
 const chatForm = document.getElementById('chatForm');
 const chatInput = document.getElementById('chatInput');
@@ -415,17 +347,45 @@ function renderChatMessage(data) {
   while(messagesBox.children.length>100) messagesBox.removeChild(messagesBox.firstChild); messagesBox.scrollTop=messagesBox.scrollHeight;
 }
 function connectChat() {
-  if (!authToken || typeof window.io === 'function') return;
-  socket = window.io({auth:{token:authToken}});
-  socket.on('connect',()=>{chatStatus.textContent='● ONLINE';chatStatus.style.color='#71ffb0';});
-  socket.on('disconnect',()=>{chatStatus.textContent='● TERPUTUS';chatStatus.style.color='#ff7180';});
-  socket.on('connect_error',()=>{chatStatus.textContent='● LOGIN ULANG DIPERLUKAN';chatStatus.style.color='#ff7180';});
-  socket.on('chat:history',history=>{messagesBox.replaceChildren();displayedMessageIds.clear();if(Array.isArray(history))history.slice(-100).forEach(renderChatMessage);});
-  socket.on('chat:new',renderChatMessage); socket.on('chat:error',d=>toast(d.message||'Chat error'));
+  // Socket.IO harus tersedia dan pengguna harus sudah login.
+  if (!authToken) return;
+  if (typeof window.io !== 'function') {
+    chatStatus.textContent = '● SOCKET.IO TIDAK TERSEDIA';
+    chatStatus.style.color = '#ff7180';
+    return;
+  }
+
+  // Hindari membuat koneksi Socket.IO ganda.
+  if (socket) socket.disconnect();
+  socket = window.io({ transports: ['websocket', 'polling'] });
+
+  socket.on('connect', () => {
+    chatStatus.textContent = '● ONLINE';
+    chatStatus.style.color = '#71ffb0';
+    // Backend mengharuskan pengguna bergabung agar riwayat dan pesan aktif.
+    socket.emit('chat:join', { username: currentUser || 'Pengunjung' });
+  });
+  socket.on('disconnect', () => {
+    chatStatus.textContent = '● TERPUTUS';
+    chatStatus.style.color = '#ff7180';
+  });
+  socket.on('connect_error', (error) => {
+    chatStatus.textContent = '● GAGAL TERHUBUNG';
+    chatStatus.style.color = '#ff7180';
+    console.error('Public Chat Socket.IO:', error && error.message ? error.message : error);
+  });
+  socket.on('chat:history', history => {
+    messagesBox.replaceChildren();
+    displayedMessageIds.clear();
+    if (Array.isArray(history)) history.slice(-100).forEach(renderChatMessage);
+  });
+  socket.on('chat:new', renderChatMessage);
+  socket.on('chat:error', data => toast(data && data.message ? data.message : 'Chat error'));
 }
 chatForm.addEventListener('submit',e=>{e.preventDefault();const message=chatInput.value.trim();if(!message)return;if(!socket||!socket.connected){toast('Chat belum tersambung.');return;}socket.emit('chat:send',{message:message.slice(0,1000)});chatInput.value='';});
 document.getElementById('sendChatFile').addEventListener('click',async()=>{const file=document.getElementById('chatFile').files[0];if(!file)return toast('Pilih file dulu.');if(file.size>5*1024*1024)return toast('File maksimal 5 MB.');if(!socket||!socket.connected)return toast('Chat belum tersambung.');try{const r=await fetch('/api/chat/upload',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-File-Name':encodeURIComponent(file.name),'X-File-Type':file.type||'application/octet-stream','X-Chat-Socket':socket.id},body:file});const d=await r.json();if(!r.ok)throw new Error(d.error||'Upload gagal.');document.getElementById('chatFile').value='';toast('File masuk ke public chat.');}catch(e){toast(e.message);}});
 
+// Owner-only preset management.
 let ownerToken = sessionStorage.getItem('hollowOwnerToken') || '';
 async function ownerApi(url, options={}) { options.headers={...(options.headers||{}), ...(ownerToken?{'x-owner-token':ownerToken}:{})}; const r=await fetch(url,options);let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'Permintaan owner gagal.');return d; }
 document.getElementById('ownerLogin').addEventListener('click',async()=>{try{const d=await fetch('/api/owner/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({password:document.getElementById('ownerPassword').value})});const j=await d.json();if(!d.ok)throw new Error(j.error||'Login owner gagal.');ownerToken=j.token;sessionStorage.setItem('hollowOwnerToken',ownerToken);showOwner(true);toast('Login owner berhasil.');}catch(e){toast(e.message);}});
@@ -434,6 +394,7 @@ function showOwner(on){document.getElementById('ownerUploadArea').classList.togg
 document.getElementById('presetUpload').addEventListener('click',async()=>{const file=document.getElementById('presetFile').files[0];if(!file)return toast('Pilih file preset dahulu.');if(file.size>5*1024*1024)return toast('Ukuran file maksimal 5 MB.');try{const label=document.getElementById('presetName').value;const d=await ownerApi('/api/owner/presets/upload',{method:'POST',headers:{'Content-Type':'application/octet-stream','X-Preset-Name':encodeURIComponent(label),'X-File-Name':encodeURIComponent(file.name)},body:file});toast(d.message||'Preset diunggah.');document.getElementById('presetFile').value='';loadPresets();}catch(e){toast(e.message);}});
 async function loadPresets(){try{const d=await apiRequest('/api/presets');const list=d.presets||[];const cards=document.getElementById('presetCards');const select=document.getElementById('waPreset');if(cards){cards.replaceChildren();if(!list.length){cards.textContent='Belum ada preset. Owner perlu mengunggah file dahulu.';}list.forEach(p=>{const el=document.createElement('div');el.className='tool card';const b=document.createElement('b');b.textContent=p.name;const small=document.createElement('small');small.textContent=p.fileName||'File preset';const a=document.createElement('a');a.className='btn ghost';a.href=p.url;a.textContent='UNDUH';a.style.textDecoration='none';el.append(b,small,a);cards.appendChild(el);});}if(select){select.replaceChildren();if(!list.length){const o=document.createElement('option');o.value='';o.textContent='Belum ada preset';select.appendChild(o);}list.forEach(p=>{const o=document.createElement('option');o.value=p.name;o.textContent=p.name+' — '+p.fileName;select.appendChild(o);});}}catch(e){toast(e.message);}}
 
+// WhatsApp pairing uses a per-browser random ID and server-issued session token.
 let waClientId=localStorage.getItem('hollowWaClientId')||'';let waToken=localStorage.getItem('hollowWaToken')||'';
 function getWaClientId(){if(!waClientId){const bytes=new Uint8Array(16);if(window.crypto&&crypto.getRandomValues)crypto.getRandomValues(bytes);else for(let i=0;i<bytes.length;i++)bytes[i]=Math.floor(Math.random()*256);waClientId=Array.from(bytes).map(b=>b.toString(16).padStart(2,'0')).join('');localStorage.setItem('hollowWaClientId',waClientId);}return waClientId;}
 async function waApi(url,options={}){options.headers={...(options.headers||{}),'x-wa-token':waToken};const r=await fetch(url,options);let d={};try{d=await r.json()}catch{}if(!r.ok)throw new Error(d.error||'WhatsApp request gagal.');return d;}
