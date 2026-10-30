@@ -357,7 +357,7 @@ function connectChat() {
 
   // Hindari membuat koneksi Socket.IO ganda.
   if (socket) socket.disconnect();
-  socket = window.io({ transports: ['websocket', 'polling'] });
+  socket = window.io({ auth: { token: authToken }, transports: ['websocket', 'polling'] });
 
   socket.on('connect', () => {
     chatStatus.textContent = '● ONLINE';
