@@ -106,7 +106,6 @@ app.use(helmet({
 app.use(express.json({ limit: '100kb' }));
 app.use(express.static(path.join(__dirname, 'public'), { extensions: ['html'] }));
 
-// Also serve index.html from the project root for simple deployments.
 app.get('/', (_req, res) => res.sendFile(path.join(__dirname, 'index.html')));
 
 const presetLabels = ['DELAY HARD', 'FOR CLOSE', 'SPAM OTP', 'CRASH C1', 'LOCK CHAT'];
@@ -139,14 +138,14 @@ function decodeHeader(value, fallback) {
 
 function cleanFilename(value) {
   const base = path.basename(String(value || 'file.bin'))
-    .replace(/[\r\n"\\/]/g, '_')
+    .replace(/[\\r\\n"\\\\/]/g, '_')
     .trim();
   return (base || 'file.bin').slice(0, 120);
 }
 
 function extension(name) {
   const ext = path.extname(name).toLowerCase();
-  return /^\.[a-z0-9]{1,10}$/.test(ext) ? ext : '.bin';
+  return /^\\.[a-z0-9]{1,10}$/.test(ext) ? ext : '.bin';
 }
 
 function safeEqual(a, b) {
@@ -365,7 +364,7 @@ const users = new Map();
 
 function safeName(value) {
   return String(value || 'Pengunjung')
-    .replace(/[<>\r\n]/g, '')
+    .replace(/[<>\\r\\n]/g, '')
     .trim()
     .slice(0, 24) || 'Pengunjung';
 }
@@ -474,11 +473,10 @@ app.get('/api/chat/files/:file', (req, res) => {
   res.sendFile(full);
 });
 
-// WhatsApp sessions are protected by a random token returned by the server.
 const waSessions = new Map();
 
 function normalizePhone(value) {
-  return String(value || '').replace(/\D/g, '');
+  return String(value || '').replace(/\\D/g, '');
 }
 
 function validClientId(value) {
@@ -593,8 +591,6 @@ app.post('/api/whatsapp/pair', async (req, res) => {
     if (state.creds.registered) {
       session.status = 'starting';
     } else {
-      // Pairing-code mode must request a code directly; waiting for update.qr
-      // can leave the phone trying to use a code from an incomplete session.
       setTimeout(async () => {
         if (session.sock !== sock || pairingRequested || state.creds.registered) return;
         pairingRequested = true;
